@@ -11,6 +11,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.rmi.NotBoundException;
+import java.rmi.RMISecurityManager;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -46,6 +47,8 @@ public class Boot {
     private static final String DB_PASSWORD = "db.password";
 
     public static void main(String... args) throws RemoteException, FileNotFoundException, IOException, NotBoundException {
+        System.setSecurityManager(new RMISecurityManager());
+
         for (String arg : args) {
             switch (arg) {
                 case "-nogui":

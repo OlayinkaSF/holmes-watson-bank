@@ -5,8 +5,6 @@
  */
 package org.holmes.watson.bank.hq;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import org.holmes.watson.bank.agency.entity.AgencyJpaController;
 import org.holmes.watson.bank.agency.service.AccountServiceImpl;

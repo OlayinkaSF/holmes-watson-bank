@@ -11,6 +11,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.rmi.NotBoundException;
+import java.rmi.RMISecurityManager;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -44,6 +45,8 @@ public class Boot {
     private static EntityManagerFactory managerFactory;
 
     public static void main(String... args) throws RemoteException, FileNotFoundException, IOException, NotBoundException {
+        System.setSecurityManager(new RMISecurityManager());
+
         for (String arg : args) {
             switch (arg) {
                 case "-nogui":
@@ -89,7 +92,7 @@ public class Boot {
         registry.rebind(AccountService.SERVICE_NAME, UnicastRemoteObject.exportObject(ACCOUNT_SERVICE, HolmesWatson.HQ_PORT));
         registry.rebind(TransactionService.SERVICE_NAME, UnicastRemoteObject.exportObject(TRANSACTION_SERVICE, HolmesWatson.HQ_PORT));
 
-        //org.holmes.watson.bank.agency.service.Boot.main("-gui");
+        new CreateAgencyView().setVisible(true);
         ServiceRepo.startPing(managerFactory);
     }
 
