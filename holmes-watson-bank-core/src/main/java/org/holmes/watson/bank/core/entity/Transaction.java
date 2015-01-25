@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -35,12 +36,16 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Transaction.findByTransactiondate", query = "SELECT t FROM Transaction t WHERE t.transactiondate = :transactiondate"),
     @NamedQuery(name = "Transaction.findByTransactiontype", query = "SELECT t FROM Transaction t WHERE t.transactiontype = :transactiontype")})
 public class Transaction implements Serializable {
+
     private static final long serialVersionUID = 1L;
+    public static final String WITHDRAW = "WITHDRAW";
+    public static final String DEPOSIT = "DEPOSIT";
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id
     @Basic(optional = false)
     @NotNull
-    private BigDecimal transactionid;
+    @GeneratedValue
+    private Long transactionid;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 100)
@@ -63,11 +68,11 @@ public class Transaction implements Serializable {
     public Transaction() {
     }
 
-    public Transaction(BigDecimal transactionid) {
+    public Transaction(long transactionid) {
         this.transactionid = transactionid;
     }
 
-    public Transaction(BigDecimal transactionid, String description, BigDecimal amount, Date transactiondate, String transactiontype) {
+    public Transaction(Long transactionid, String description, BigDecimal amount, Date transactiondate, String transactiontype) {
         this.transactionid = transactionid;
         this.description = description;
         this.amount = amount;
@@ -75,11 +80,11 @@ public class Transaction implements Serializable {
         this.transactiontype = transactiontype;
     }
 
-    public BigDecimal getTransactionid() {
+    public Long getTransactionid() {
         return transactionid;
     }
 
-    public void setTransactionid(BigDecimal transactionid) {
+    public void setTransactionid(Long transactionid) {
         this.transactionid = transactionid;
     }
 
@@ -147,5 +152,5 @@ public class Transaction implements Serializable {
     public String toString() {
         return "org.holmes.watson.bank.core.entity.Transaction[ transactionid=" + transactionid + " ]";
     }
-    
+
 }

@@ -5,11 +5,13 @@
  */
 package org.holmes.watson.bank.core;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Olayinka
  */
-public class Message {
+public class Message implements Serializable{
 
     public static MessageBuilder builder(boolean status) {
         return new MessageBuilder(status);
@@ -18,7 +20,7 @@ public class Message {
     boolean status = false;
     String message;
     String toDo;
-    Object attachment;
+    Object[] attachment;
 
     private void setStatus(boolean status) {
         this.status = status;
@@ -44,11 +46,11 @@ public class Message {
         return toDo;
     }
 
-    public Object getAttachment() {
+    public Object[] getAttachment() {
         return attachment;
     }
 
-    private void setAttachment(Object attachment) {
+    private void setAttachment(Object... attachment) {
         this.attachment = attachment;
     }
 
@@ -71,7 +73,7 @@ public class Message {
             return this;
         }
 
-        public MessageBuilder attachment(Object attachment) {
+        public MessageBuilder attachment(Object... attachment) {
             this.message.setAttachment(attachment);
             return this;
         }

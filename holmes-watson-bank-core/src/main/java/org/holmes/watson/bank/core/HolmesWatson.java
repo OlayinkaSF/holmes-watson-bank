@@ -12,7 +12,7 @@ package org.holmes.watson.bank.core;
 public final class HolmesWatson {
 
     public static final String NAME = "Holmes & Watson Inc.";
-    public static final String HEADQUATERS_ADDRESS = "BP Guéliz, Boulevard Abdelkrim Al Khattabi, Marrakech, Morocco";
+    public static final String HEADQUATERS_ADDRESS = "localhost";
     public static final String HEADQUATERS = "HQ";
     public static final String ESTABLISHED = "20, January 2015";
     public static final String CURRENCY = "Moroccan Dirham, MAD (ISO 4217)";

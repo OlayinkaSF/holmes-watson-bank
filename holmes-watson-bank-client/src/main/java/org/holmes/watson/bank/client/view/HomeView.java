@@ -161,12 +161,11 @@ private class OpsDropDownModel implements ComboBoxModel<Operation> {
 
         @Override
         public void addListDataListener(ListDataListener l) {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+
         }
 
         @Override
         public void removeListDataListener(ListDataListener l) {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
     }
 

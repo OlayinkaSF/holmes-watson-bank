@@ -6,7 +6,6 @@
 package org.holmes.watson.bank.agency.entity;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -15,7 +14,6 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import org.holmes.watson.bank.agency.entity.exceptions.NonexistentEntityException;
-import org.holmes.watson.bank.agency.entity.exceptions.PreexistingEntityException;
 import org.holmes.watson.bank.core.entity.Transaction;
 
 /**
@@ -33,18 +31,13 @@ public class TransactionJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(Transaction transaction) throws PreexistingEntityException, Exception {
+    public void create(Transaction transaction) {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
             em.persist(transaction);
             em.getTransaction().commit();
-        } catch (Exception ex) {
-            if (findTransaction(transaction.getTransactionid()) != null) {
-                throw new PreexistingEntityException("Transaction " + transaction + " already exists.", ex);
-            }
-            throw ex;
         } finally {
             if (em != null) {
                 em.close();
@@ -62,7 +55,7 @@ public class TransactionJpaController implements Serializable {
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
-                BigDecimal id = transaction.getTransactionid();
+                Long id = transaction.getTransactionid();
                 if (findTransaction(id) == null) {
                     throw new NonexistentEntityException("The transaction with id " + id + " no longer exists.");
                 }
@@ -75,7 +68,7 @@ public class TransactionJpaController implements Serializable {
         }
     }
 
-    public void destroy(BigDecimal id) throws NonexistentEntityException {
+    public void destroy(Long id) throws NonexistentEntityException {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -120,7 +113,7 @@ public class TransactionJpaController implements Serializable {
         }
     }
 
-    public Transaction findTransaction(BigDecimal id) {
+    public Transaction findTransaction(Long id) {
         EntityManager em = getEntityManager();
         try {
             return em.find(Transaction.class, id);

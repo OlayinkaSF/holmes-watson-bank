@@ -15,12 +15,9 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Properties;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import org.holmes.watson.bank.agency.view.AgencyView;
 import org.holmes.watson.bank.core.AccountService;
 import org.holmes.watson.bank.core.HolmesWatson;
 import org.holmes.watson.bank.core.TransactionService;
@@ -44,6 +41,7 @@ public class Boot {
 
     private static final String DB_USER_NAME = "db.user";
     private static final String DB_PASSWORD = "db.password";
+    private static EntityManagerFactory managerFactory;
 
     public static void main(String... args) throws RemoteException, FileNotFoundException, IOException, NotBoundException {
         for (String arg : args) {
@@ -81,7 +79,7 @@ public class Boot {
 
         Registry registry = LocateRegistry.createRegistry(HolmesWatson.HQ_PORT);
 
-        EntityManagerFactory managerFactory = Persistence.createEntityManagerFactory("HOLMESWATSONHQ");
+        managerFactory = Persistence.createEntityManagerFactory("HOLMESWATSONHQ");
 
         ((AuthServiceImpl) AUTH_SERVICE).setEmf(managerFactory);
         ((TransactionServiceImpl) TRANSACTION_SERVICE).setEmf(managerFactory);
@@ -90,9 +88,13 @@ public class Boot {
         registry.rebind(AuthService.SERVICE_NAME, UnicastRemoteObject.exportObject(AUTH_SERVICE, HolmesWatson.HQ_PORT));
         registry.rebind(AccountService.SERVICE_NAME, UnicastRemoteObject.exportObject(ACCOUNT_SERVICE, HolmesWatson.HQ_PORT));
         registry.rebind(TransactionService.SERVICE_NAME, UnicastRemoteObject.exportObject(TRANSACTION_SERVICE, HolmesWatson.HQ_PORT));
-        if (GUI) {
-            new AgencyView().setVisible(GUI);
-        }
+
         //org.holmes.watson.bank.agency.service.Boot.main("-gui");
+        ServiceRepo.startPing(managerFactory);
     }
+
+    public static EntityManagerFactory getManagerFactory() {
+        return managerFactory;
+    }
+
 }

@@ -8,6 +8,7 @@ package org.holmes.watson.bank.core;
 import java.math.BigDecimal;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.util.List;
 import org.android.json.JSONObject;
 import org.holmes.watson.bank.core.entity.Account;
 import org.holmes.watson.bank.core.entity.Client;
@@ -24,10 +25,14 @@ public interface AccountService extends Remote {
 
     public Message getClient(Client client) throws RemoteException;
 
-    public Message createAccount(Client client, JSONObject account, BigDecimal init) throws RemoteException;
+    public Message createAccount(Client client, JSONObject account) throws RemoteException;
 
     public Message deleteAccount(Account account) throws RemoteException;
 
-    public Message modifyAccount(Client client) throws RemoteException;
+    public Message modifyAccount(Account account) throws RemoteException;
+
+    public Message deleteClient(Client client) throws RemoteException;
+
+    public List<Account> getAccounts(Client client) throws RemoteException;
 
 }

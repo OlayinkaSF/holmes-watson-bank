@@ -6,6 +6,7 @@
 package org.holmes.watson.bank.core;
 
 import java.util.Random;
+import org.holmes.watson.bank.core.entity.Agency;
 
 /**
  *
@@ -21,5 +22,13 @@ public class Utils {
             val = bits % n;
         } while (bits - val + (n - 1) < 0L);
         return val;
+    }
+
+    public static boolean isMyAgency(String accountnum) {
+        return Agency.getAgency().getAgencyid().equals(accountnum.split("-")[0]);
+    }
+
+    public static String getAgencyId(String clientid) {
+        return clientid.split("-")[0];
     }
 }

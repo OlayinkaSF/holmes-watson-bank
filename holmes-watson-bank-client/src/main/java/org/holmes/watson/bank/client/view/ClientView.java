@@ -7,16 +7,26 @@ package org.holmes.watson.bank.client.view;
 
 import java.awt.CardLayout;
 import java.math.BigDecimal;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JPanel;
 import org.android.json.JSONObject;
 import org.holmes.watson.bank.core.AccountListener;
+import org.holmes.watson.bank.core.AccountService;
+import org.holmes.watson.bank.core.AgencyServices;
+import org.holmes.watson.bank.core.HolmesWatson;
 import org.holmes.watson.bank.core.Message;
 import org.holmes.watson.bank.core.TransactionListener;
+import org.holmes.watson.bank.core.TransactionService;
 import org.holmes.watson.bank.core.auth.AuthService;
 import org.holmes.watson.bank.core.auth.ClientAuthListener;
+import org.holmes.watson.bank.core.entity.Account;
+import org.holmes.watson.bank.core.entity.Agency;
 import org.holmes.watson.bank.core.entity.Client;
 
 /**
@@ -25,7 +35,6 @@ import org.holmes.watson.bank.core.entity.Client;
  */
 public class ClientView extends javax.swing.JFrame implements ClientAuthListener, TransactionListener, AccountListener {
 
-    final private AuthService authService = null;
     private final CardLayout cardLayout = new CardLayout();
     private final JPanel cards = new JPanel(cardLayout);
     private static Client client;
@@ -33,13 +42,17 @@ public class ClientView extends javax.swing.JFrame implements ClientAuthListener
     public static Client getClient() {
         return client;
     }
+    private final AgencyServices hqServices;
+    private static Agency agency;
+    private AgencyServices agencyServices;
 
-    public ClientView() {
+    ClientView(AgencyServices hqServices) {
+        this.hqServices = hqServices;
         initComponents();
         cards.add(new AuthView(this), AuthView.TAG_NAME);
         cards.add(new HomeView(this, this), HomeView.TAG_NAME);
-        add(cards);
         cardLayout.show(cards, AuthView.TAG_NAME);
+        add(cards);
     }
 
     /**
@@ -54,17 +67,7 @@ public class ClientView extends javax.swing.JFrame implements ClientAuthListener
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMaximumSize(new java.awt.Dimension(960, 540));
         setMinimumSize(new java.awt.Dimension(960, 540));
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 960, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 540, Short.MAX_VALUE)
-        );
+        setResizable(false);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -75,12 +78,24 @@ public class ClientView extends javax.swing.JFrame implements ClientAuthListener
     @Override
     public void authenticate(String login, String password) {
         try {
-            Message message = authService.authenticate(login, password);
-            if (message.getStatus() && (message.getAttachment() instanceof Client)) {
+            Message message = hqServices.getAuthService().authenticate(login, password);
+            if (message.getStatus()) {
                 cardLayout.show(cards, HomeView.TAG_NAME);
-                client = (Client) message.getAttachment();
+                client = (Client) message.getAttachment()[0];
+                agency = (Agency) message.getAttachment()[1];
+                client.getAccountList().addAll((ArrayList<Account>) message.getAttachment()[2]);
+            } else {
+                System.out.println(message.getMessage());
+                return;
             }
-        } catch (RemoteException ex) {
+            Registry registry = LocateRegistry.getRegistry(agency.getAddress(), HolmesWatson.PORT);
+            AuthService authService = (AuthService) registry.lookup(AuthService.SERVICE_NAME);
+            TransactionService transactionService = (TransactionService) registry.lookup(TransactionService.SERVICE_NAME);
+            AccountService accountService = (AccountService) registry.lookup(AccountService.SERVICE_NAME);
+
+            agencyServices = new AgencyServices(accountService, transactionService, authService);
+
+        } catch (RemoteException | NotBoundException ex) {
             Logger.getLogger(ClientView.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

@@ -79,7 +79,7 @@ public class Boot {
         Agency agency = new Agency(agencyKey, agencyAddress);
         Agency.setAgency(agency);
 
-        Registry registry = LocateRegistry.getRegistry(properties.getProperty("hq.host", HolmesWatson.HEADQUATERS_ADDRESS), HolmesWatson.HQ_PORT);
+        Registry registry = LocateRegistry.getRegistry(HolmesWatson.HEADQUATERS_ADDRESS, HolmesWatson.HQ_PORT);
         AuthService authService = (AuthService) registry.lookup(AuthService.SERVICE_NAME);
         TransactionService transactionService = (TransactionService) registry.lookup(TransactionService.SERVICE_NAME);
         AccountService accountService = (AccountService) registry.lookup(AccountService.SERVICE_NAME);
@@ -101,7 +101,7 @@ public class Boot {
         registry.rebind(AuthService.SERVICE_NAME, UnicastRemoteObject.exportObject(AUTH_SERVICE, HolmesWatson.PORT));
         registry.rebind(AccountService.SERVICE_NAME, UnicastRemoteObject.exportObject(ACCOUNT_SERVICE, HolmesWatson.PORT));
         registry.rebind(TransactionService.SERVICE_NAME, UnicastRemoteObject.exportObject(TRANSACTION_SERVICE, HolmesWatson.PORT));
-         if (GUI) {
+        if (GUI) {
             new AgencyView().setVisible(GUI);
         }
     }
