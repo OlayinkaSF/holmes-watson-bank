@@ -101,8 +101,6 @@ public class Boot {
         registry.rebind(AuthService.SERVICE_NAME, UnicastRemoteObject.exportObject(AUTH_SERVICE, HolmesWatson.PORT));
         registry.rebind(AccountService.SERVICE_NAME, UnicastRemoteObject.exportObject(ACCOUNT_SERVICE, HolmesWatson.PORT));
         registry.rebind(TransactionService.SERVICE_NAME, UnicastRemoteObject.exportObject(TRANSACTION_SERVICE, HolmesWatson.PORT));
-        if (GUI) {
-            new AgencyView().setVisible(GUI);
-        }
+        new AgencyView().setVisible(true);
     }
 }

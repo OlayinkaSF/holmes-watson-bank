@@ -39,6 +39,9 @@ public class DeleteClientView extends javax.swing.JPanel {
         jTextField1 = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
 
+        setMaximumSize(new java.awt.Dimension(940, 400));
+        setMinimumSize(new java.awt.Dimension(940, 400));
+
         jLabel5.setText("Delete Client");
 
         jLabel1.setText("Id Client");
@@ -72,7 +75,7 @@ public class DeleteClientView extends javax.swing.JPanel {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(206, 206, 206)
                         .addComponent(jButton1)))
-                .addContainerGap(233, Short.MAX_VALUE))
+                .addContainerGap(623, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -85,7 +88,7 @@ public class DeleteClientView extends javax.swing.JPanel {
                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jButton1)
-                .addContainerGap(189, Short.MAX_VALUE))
+                .addContainerGap(289, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 

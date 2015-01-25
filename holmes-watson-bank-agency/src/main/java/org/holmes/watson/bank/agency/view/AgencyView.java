@@ -6,11 +6,7 @@
 package org.holmes.watson.bank.agency.view;
 
 import java.awt.CardLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import javax.swing.JOptionPane;
-import static javax.swing.JOptionPane.INFORMATION_MESSAGE;
-import static javax.swing.JOptionPane.OK_CANCEL_OPTION;
 
 /**
  *
@@ -51,6 +47,10 @@ public class AgencyView extends javax.swing.JFrame implements TransactionListene
         setMaximumSize(new java.awt.Dimension(960, 540));
         setMinimumSize(new java.awt.Dimension(960, 540));
 
+        cards.setMaximumSize(new java.awt.Dimension(940, 400));
+        cards.setMinimumSize(new java.awt.Dimension(940, 400));
+        cards.setPreferredSize(new java.awt.Dimension(940, 400));
+
         javax.swing.GroupLayout cardsLayout = new javax.swing.GroupLayout(cards);
         cards.setLayout(cardsLayout);
         cardsLayout.setHorizontalGroup(
@@ -59,7 +59,7 @@ public class AgencyView extends javax.swing.JFrame implements TransactionListene
         );
         cardsLayout.setVerticalGroup(
             cardsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 395, Short.MAX_VALUE)
+            .addGap(0, 400, Short.MAX_VALUE)
         );
 
         jButton1.setText("Delete Client ");
@@ -102,10 +102,6 @@ public class AgencyView extends javax.swing.JFrame implements TransactionListene
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(cards, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
-            .addGroup(layout.createSequentialGroup()
                 .addGap(21, 21, 21)
                 .addComponent(jButton2)
                 .addGap(18, 18, 18)
@@ -117,6 +113,10 @@ public class AgencyView extends javax.swing.JFrame implements TransactionListene
                 .addGap(35, 35, 35)
                 .addComponent(jButton5)
                 .addGap(178, 324, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(cards, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -128,9 +128,9 @@ public class AgencyView extends javax.swing.JFrame implements TransactionListene
                     .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
                 .addComponent(cards, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(23, 23, 23))
+                .addContainerGap())
         );
 
         pack();

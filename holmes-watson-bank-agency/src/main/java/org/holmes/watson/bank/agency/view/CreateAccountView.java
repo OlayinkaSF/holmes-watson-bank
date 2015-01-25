@@ -49,6 +49,9 @@ public class CreateAccountView extends AbstrPanel {
         jTextField4 = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
 
+        setMaximumSize(new java.awt.Dimension(940, 400));
+        setMinimumSize(new java.awt.Dimension(940, 400));
+
         jLabel1.setText("Id Client");
 
         jTextField1.addActionListener(new java.awt.event.ActionListener() {
@@ -88,7 +91,7 @@ public class CreateAccountView extends AbstrPanel {
                         .addGroup(layout.createSequentialGroup()
                             .addGap(204, 204, 204)
                             .addComponent(jLabel4))))
-                .addContainerGap(342, Short.MAX_VALUE))
+                .addContainerGap(661, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -104,7 +107,7 @@ public class CreateAccountView extends AbstrPanel {
                     .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(29, 29, 29)
                 .addComponent(jButton1)
-                .addContainerGap(138, Short.MAX_VALUE))
+                .addContainerGap(238, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
