@@ -79,7 +79,7 @@ public class Boot {
         Agency agency = new Agency(agencyKey, agencyAddress);
         Agency.setAgency(agency);
 
-        Registry registry = LocateRegistry.getRegistry(HolmesWatson.HEADQUATERS_ADDRESS, HolmesWatson.HQ_PORT);
+        Registry registry = LocateRegistry.getRegistry(properties.getProperty("hq.host", HolmesWatson.HEADQUATERS_ADDRESS), HolmesWatson.HQ_PORT);
         AuthService authService = (AuthService) registry.lookup(AuthService.SERVICE_NAME);
         TransactionService transactionService = (TransactionService) registry.lookup(TransactionService.SERVICE_NAME);
         AccountService accountService = (AccountService) registry.lookup(AccountService.SERVICE_NAME);
