@@ -163,7 +163,6 @@ public class CreateClientView extends AbstrPanel {
                 jSONObject.put("account.name", account.getAccountnum());
                 message = accountService.createAccount((Client) message.getAttachment()[0], jSONObject);
                 optionPane(message.getMessage());
-                message = accountService.createAccount((Client) message.getAttachment()[0], object);
             }
         } catch (JSONException | RemoteException ex) {
             Logger.getLogger(CreateClientView.class.getName()).log(Level.SEVERE, null, ex);

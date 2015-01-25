@@ -112,7 +112,9 @@ public class AccountServiceImpl implements AccountService {
         if (tempClient != null) {
             try {
                 client = tempClient;
-                clientController.create(client);
+                if (!Utils.isMyAgency(client.getClientid())) {
+                    clientController.create(client);
+                }
                 Account account = new Account(accountObject.getString("account.name"), new BigDecimal(accountObject.getString("account.init.balance")), Account.STATUS_OPEN);
                 account.setClientid(client);
                 accountController.create(account);
