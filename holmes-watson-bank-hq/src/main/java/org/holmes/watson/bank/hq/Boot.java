@@ -25,8 +25,8 @@ import org.holmes.watson.bank.core.TransactionService;
 import org.holmes.watson.bank.core.auth.AuthService;
 import org.holmes.watson.bank.core.entity.Agency;
 import static org.holmes.watson.bank.hq.AccountServiceImpl.ACCOUNT_SERVICE;
-import static org.holmes.watson.bank.hq.AuthServiceImpl.AUTH_SERVICE;
-import static org.holmes.watson.bank.hq.TransactionServiceImpl.TRANSACTION_SERVICE;
+import static org.holmes.watson.bank.hq.ServiceRepo.AUTH_SERVICE;
+import static org.holmes.watson.bank.hq.ServiceRepo.TRANSACTION_SERVICE;
 
 /**
  *
@@ -84,7 +84,6 @@ public class Boot {
 
         managerFactory = Persistence.createEntityManagerFactory("HOLMESWATSONHQ");
 
-        ((AuthServiceImpl) AUTH_SERVICE).setEmf(managerFactory);
         ((TransactionServiceImpl) TRANSACTION_SERVICE).setEmf(managerFactory);
         ((AccountServiceImpl) ACCOUNT_SERVICE).setEmf(managerFactory);
 
@@ -92,7 +91,7 @@ public class Boot {
         registry.rebind(AccountService.SERVICE_NAME, UnicastRemoteObject.exportObject(ACCOUNT_SERVICE, HolmesWatson.HQ_PORT));
         registry.rebind(TransactionService.SERVICE_NAME, UnicastRemoteObject.exportObject(TRANSACTION_SERVICE, HolmesWatson.HQ_PORT));
 
-        new CreateAgencyView().setVisible(true);
+        new HQView().setVisible(true);
         ServiceRepo.startPing(managerFactory);
     }
 

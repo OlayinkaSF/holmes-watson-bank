@@ -21,7 +21,6 @@ import org.holmes.watson.bank.core.entity.Transaction;
  */
 public class TransactionServiceImpl implements TransactionService {
 
-    final static TransactionService TRANSACTION_SERVICE = new TransactionServiceImpl();
     private EntityManagerFactory emf;
 
     @Override

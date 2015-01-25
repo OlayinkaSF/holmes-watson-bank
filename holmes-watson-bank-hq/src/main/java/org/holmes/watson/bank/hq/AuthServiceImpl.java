@@ -20,8 +20,6 @@ import org.holmes.watson.bank.core.entity.Client;
  */
 public class AuthServiceImpl implements AuthService {
 
-    final static AuthService AUTH_SERVICE = new AuthServiceImpl();
-
     @Override
     public Message authenticate(String login, String password) throws RemoteException {
         System.out.println(Arrays.toString(new String[]{login, password}));
@@ -41,10 +39,5 @@ public class AuthServiceImpl implements AuthService {
         }
         return message;
     }
-
-    void setEmf(EntityManagerFactory managerFactory) {
-        this.emf = managerFactory;
-    }
-    private EntityManagerFactory emf;
 
 }

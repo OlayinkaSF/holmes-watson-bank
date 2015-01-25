@@ -34,11 +34,13 @@ public class ServiceRepo {
 
     private static final HashMap<String, AgencyServices> servicesMap = new HashMap<>();
     private static AgencyJpaController agencyController;
+    public static final AuthService AUTH_SERVICE = new AuthServiceImpl();
+    public static final AccountService ACCOUNT_SERVICE = new AccountServiceImpl();
+    public static final TransactionService TRANSACTION_SERVICE = new TransactionServiceImpl();
 
     static AgencyServices getAgencyService(String agencyId) {
         return servicesMap.get(agencyId);
     }
-
 
     final static ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 

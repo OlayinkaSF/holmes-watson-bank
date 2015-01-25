@@ -6,6 +6,7 @@
 package org.holmes.watson.bank.agency.service;
 
 import java.rmi.RemoteException;
+import java.util.Arrays;
 import javax.persistence.EntityManagerFactory;
 import org.holmes.watson.bank.agency.entity.ClientJpaController;
 import static org.holmes.watson.bank.agency.service.TransactionServiceImpl.TRANSACTION_SERVICE;
@@ -32,6 +33,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public Message authenticate(String login, String password) throws RemoteException {
+        System.out.println(Arrays.toString(new String[]{login, password}));
         Client client = new Client(login);
         client = clientController.findClient(client.getClientid());
         return Message.builder(client != null)

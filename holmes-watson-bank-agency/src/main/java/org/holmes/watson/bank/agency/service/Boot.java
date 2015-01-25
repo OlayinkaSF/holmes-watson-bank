@@ -56,6 +56,7 @@ public class Boot {
                     break;
                 case "-gui":
                     GUI = true;
+                    
                     break;
                 default:
                     System.out.println("Usage with -gui xor gui");
