@@ -11,6 +11,7 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import javax.persistence.EntityManagerFactory;
@@ -35,6 +36,7 @@ public class Boot {
 
     public static void main(String... args) throws RemoteException, FileNotFoundException, IOException, NotBoundException {
 
+        System.out.println(Arrays.toString(args));
         Registry registry = LocateRegistry.getRegistry(args.length == 0 ? HolmesWatson.HEADQUATERS_ADDRESS : args[0], HolmesWatson.HQ_PORT);
         AuthService authService = (AuthService) registry.lookup(AuthService.SERVICE_NAME);
         TransactionService transactionService = (TransactionService) registry.lookup(TransactionService.SERVICE_NAME);
