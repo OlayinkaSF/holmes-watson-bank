@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.Properties;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import org.holmes.watson.bank.agency.entity.ClientJpaController;
 import static org.holmes.watson.bank.agency.service.AccountServiceImpl.ACCOUNT_SERVICE;
 import static org.holmes.watson.bank.agency.service.AuthServiceImpl.AUTH_SERVICE;
 import static org.holmes.watson.bank.agency.service.TransactionServiceImpl.TRANSACTION_SERVICE;
@@ -96,6 +97,9 @@ public class Boot {
         persistenceMap.put("javax.persistence.jdbc.user", properties.getProperty(DB_USER_NAME));
         persistenceMap.put("javax.persistence.jdbc.password", properties.getProperty(DB_PASSWORD));
         managerFactory = Persistence.createEntityManagerFactory("HOLMESWATSON", persistenceMap);
+        
+        ClientJpaController cjc = new ClientJpaController(managerFactory);
+        System.out.println(cjc.findClient("AWE-1192399080"));
 
         ((AuthServiceImpl) AUTH_SERVICE).setEmf(managerFactory);
         ((TransactionServiceImpl) TRANSACTION_SERVICE).setEmf(managerFactory);

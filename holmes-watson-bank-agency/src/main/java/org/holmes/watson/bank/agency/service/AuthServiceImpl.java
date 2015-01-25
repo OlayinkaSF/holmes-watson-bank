@@ -36,6 +36,7 @@ public class AuthServiceImpl implements AuthService {
         System.out.println(Arrays.toString(new String[]{login, password}));
         Client client = new Client(login);
         client = clientController.findClient(client.getClientid());
+        System.out.println(client);
         return Message.builder(client != null)
                 .attachment(client, Agency.getAgency())
                 .build();

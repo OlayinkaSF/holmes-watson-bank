@@ -24,7 +24,7 @@ import org.holmes.watson.bank.core.HolmesWatson;
 import org.holmes.watson.bank.core.TransactionService;
 import org.holmes.watson.bank.core.auth.AuthService;
 import org.holmes.watson.bank.core.entity.Agency;
-import static org.holmes.watson.bank.hq.AccountServiceImpl.ACCOUNT_SERVICE;
+import static org.holmes.watson.bank.hq.ServiceRepo.ACCOUNT_SERVICE;
 import static org.holmes.watson.bank.hq.ServiceRepo.AUTH_SERVICE;
 import static org.holmes.watson.bank.hq.ServiceRepo.TRANSACTION_SERVICE;
 
