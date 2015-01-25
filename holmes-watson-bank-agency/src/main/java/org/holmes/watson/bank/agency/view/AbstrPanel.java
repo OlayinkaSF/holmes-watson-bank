@@ -20,12 +20,9 @@ public abstract class AbstrPanel extends JPanel {
 
     public AbstrPanel(TransactionListener listener) {
         this.listener = listener;
-        initComponents();
     }
 
     public void optionPane(String message) {
         listener.optionPane(message);
     }
-
-    public abstract void initComponents();
 }

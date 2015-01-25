@@ -28,6 +28,7 @@ public class CreateAccountView extends AbstrPanel {
 
     public CreateAccountView(TransactionListener listener) {
         super(listener);
+        initComponents();
     }
 
     /**
