@@ -4,6 +4,8 @@
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     <class>org.holmes.watson.bank.core.entity.Client</class>
     <class>org.holmes.watson.bank.core.entity.Account</class>
+    <class>org.holmes.watson.bank.core.entity.Agency</class>
+    <class>org.holmes.watson.bank.core.entity.Transaction</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:oracle:thin:@localhost:1521:XE"/>
       <property name="javax.persistence.jdbc.password" value="HOLMESWATSONHQ"/>

@@ -43,6 +43,7 @@ public class AuthServiceImpl implements AuthService {
 
     void setEmf(EntityManagerFactory managerFactory) {
         this.emf = managerFactory;
+        clientController = new ClientJpaController(emf);
     }
     private EntityManagerFactory emf;
 

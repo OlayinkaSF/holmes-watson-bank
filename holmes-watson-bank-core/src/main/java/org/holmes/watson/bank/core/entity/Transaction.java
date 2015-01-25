@@ -9,13 +9,15 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 import javax.persistence.Basic;
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
@@ -27,6 +29,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Olayinka
  */
 @Entity
+@Table(catalog = "", schema = "HOLMESWATSONHQ")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Transaction.findAll", query = "SELECT t FROM Transaction t"),
@@ -38,32 +41,37 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class Transaction implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    public static final String WITHDRAW = "WITHDRAW";
-    public static final String DEPOSIT = "DEPOSIT";
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id
     @Basic(optional = false)
     @NotNull
-    @GeneratedValue
+    @Column(nullable = false, precision = 38, scale = 0)
     private Long transactionid;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 100)
+    @Column(nullable = false, length = 100)
     private String description;
     @Basic(optional = false)
     @NotNull
+    @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal amount;
     @Basic(optional = false)
     @NotNull
+    @Column(nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date transactiondate;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 20)
+    @Column(nullable = false, length = 20)
     private String transactiontype;
-    @JoinColumn(name = "ACCOUNTNUM", referencedColumnName = "ACCOUNTNUM")
-    @ManyToOne(optional = false)
+    @JoinColumn(name = "ACCOUNTNUM", referencedColumnName = "ACCOUNTNUM", nullable = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private Account accountnum;
+
+    public static final String WITHDRAW = "WITHDRAW";
+    public static final String DEPOSIT = "DEPOSIT";
 
     public Transaction() {
     }
@@ -72,7 +80,7 @@ public class Transaction implements Serializable {
         this.transactionid = transactionid;
     }
 
-    public Transaction(Long transactionid, String description, BigDecimal amount, Date transactiondate, String transactiontype) {
+    public Transaction(long transactionid, String description, BigDecimal amount, Date transactiondate, String transactiontype) {
         this.transactionid = transactionid;
         this.description = description;
         this.amount = amount;
@@ -80,11 +88,11 @@ public class Transaction implements Serializable {
         this.transactiontype = transactiontype;
     }
 
-    public Long getTransactionid() {
+    public long getTransactionid() {
         return transactionid;
     }
 
-    public void setTransactionid(Long transactionid) {
+    public void setTransactionid(long transactionid) {
         this.transactionid = transactionid;
     }
 

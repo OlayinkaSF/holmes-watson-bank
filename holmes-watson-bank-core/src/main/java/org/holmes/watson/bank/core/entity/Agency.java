@@ -7,10 +7,12 @@ package org.holmes.watson.bank.core.entity;
 
 import java.io.Serializable;
 import javax.persistence.Basic;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -20,6 +22,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Olayinka
  */
 @Entity
+@Table(catalog = "", schema = "HOLMESWATSONHQ")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Agency.findAll", query = "SELECT a FROM Agency a"),
@@ -32,10 +35,12 @@ public class Agency implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 3)
+    @Column(nullable = false, length = 3)
     private String agencyid;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 255)
+    @Column(nullable = false, length = 255)
     private String address;
 
     private static Agency AGENCY;

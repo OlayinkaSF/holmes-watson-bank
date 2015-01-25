@@ -6,17 +6,20 @@
 package org.holmes.watson.bank.agency.entity;
 
 import java.io.Serializable;
-import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import org.holmes.watson.bank.core.entity.Client;
+import org.holmes.watson.bank.core.entity.Transaction;
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import org.holmes.watson.bank.agency.entity.exceptions.IllegalOrphanException;
 import org.holmes.watson.bank.agency.entity.exceptions.NonexistentEntityException;
 import org.holmes.watson.bank.agency.entity.exceptions.PreexistingEntityException;
 import org.holmes.watson.bank.core.entity.Account;
-import org.holmes.watson.bank.core.entity.Client;
 
 /**
  *
@@ -34,6 +37,9 @@ public class AccountJpaController implements Serializable {
     }
 
     public void create(Account account) throws PreexistingEntityException, Exception {
+        if (account.getTransactionList() == null) {
+            account.setTransactionList(new ArrayList<Transaction>());
+        }
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -43,10 +49,25 @@ public class AccountJpaController implements Serializable {
                 clientid = em.getReference(clientid.getClass(), clientid.getClientid());
                 account.setClientid(clientid);
             }
+            List<Transaction> attachedTransactionList = new ArrayList<Transaction>();
+            for (Transaction transactionListTransactionToAttach : account.getTransactionList()) {
+                transactionListTransactionToAttach = em.getReference(transactionListTransactionToAttach.getClass(), transactionListTransactionToAttach.getTransactionid());
+                attachedTransactionList.add(transactionListTransactionToAttach);
+            }
+            account.setTransactionList(attachedTransactionList);
             em.persist(account);
             if (clientid != null) {
                 clientid.getAccountList().add(account);
                 clientid = em.merge(clientid);
+            }
+            for (Transaction transactionListTransaction : account.getTransactionList()) {
+                Account oldAccountnumOfTransactionListTransaction = transactionListTransaction.getAccountnum();
+                transactionListTransaction.setAccountnum(account);
+                transactionListTransaction = em.merge(transactionListTransaction);
+                if (oldAccountnumOfTransactionListTransaction != null) {
+                    oldAccountnumOfTransactionListTransaction.getTransactionList().remove(transactionListTransaction);
+                    oldAccountnumOfTransactionListTransaction = em.merge(oldAccountnumOfTransactionListTransaction);
+                }
             }
             em.getTransaction().commit();
         } catch (Exception ex) {
@@ -61,7 +82,7 @@ public class AccountJpaController implements Serializable {
         }
     }
 
-    public void edit(Account account) throws NonexistentEntityException, Exception {
+    public void edit(Account account) throws IllegalOrphanException, NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -69,10 +90,31 @@ public class AccountJpaController implements Serializable {
             Account persistentAccount = em.find(Account.class, account.getAccountnum());
             Client clientidOld = persistentAccount.getClientid();
             Client clientidNew = account.getClientid();
+            List<Transaction> transactionListOld = persistentAccount.getTransactionList();
+            List<Transaction> transactionListNew = account.getTransactionList();
+            List<String> illegalOrphanMessages = null;
+            for (Transaction transactionListOldTransaction : transactionListOld) {
+                if (!transactionListNew.contains(transactionListOldTransaction)) {
+                    if (illegalOrphanMessages == null) {
+                        illegalOrphanMessages = new ArrayList<String>();
+                    }
+                    illegalOrphanMessages.add("You must retain Transaction " + transactionListOldTransaction + " since its accountnum field is not nullable.");
+                }
+            }
+            if (illegalOrphanMessages != null) {
+                throw new IllegalOrphanException(illegalOrphanMessages);
+            }
             if (clientidNew != null) {
                 clientidNew = em.getReference(clientidNew.getClass(), clientidNew.getClientid());
                 account.setClientid(clientidNew);
             }
+            List<Transaction> attachedTransactionListNew = new ArrayList<Transaction>();
+            for (Transaction transactionListNewTransactionToAttach : transactionListNew) {
+                transactionListNewTransactionToAttach = em.getReference(transactionListNewTransactionToAttach.getClass(), transactionListNewTransactionToAttach.getTransactionid());
+                attachedTransactionListNew.add(transactionListNewTransactionToAttach);
+            }
+            transactionListNew = attachedTransactionListNew;
+            account.setTransactionList(transactionListNew);
             account = em.merge(account);
             if (clientidOld != null && !clientidOld.equals(clientidNew)) {
                 clientidOld.getAccountList().remove(account);
@@ -81,6 +123,17 @@ public class AccountJpaController implements Serializable {
             if (clientidNew != null && !clientidNew.equals(clientidOld)) {
                 clientidNew.getAccountList().add(account);
                 clientidNew = em.merge(clientidNew);
+            }
+            for (Transaction transactionListNewTransaction : transactionListNew) {
+                if (!transactionListOld.contains(transactionListNewTransaction)) {
+                    Account oldAccountnumOfTransactionListNewTransaction = transactionListNewTransaction.getAccountnum();
+                    transactionListNewTransaction.setAccountnum(account);
+                    transactionListNewTransaction = em.merge(transactionListNewTransaction);
+                    if (oldAccountnumOfTransactionListNewTransaction != null && !oldAccountnumOfTransactionListNewTransaction.equals(account)) {
+                        oldAccountnumOfTransactionListNewTransaction.getTransactionList().remove(transactionListNewTransaction);
+                        oldAccountnumOfTransactionListNewTransaction = em.merge(oldAccountnumOfTransactionListNewTransaction);
+                    }
+                }
             }
             em.getTransaction().commit();
         } catch (Exception ex) {
@@ -99,7 +152,7 @@ public class AccountJpaController implements Serializable {
         }
     }
 
-    public void destroy(String id) throws NonexistentEntityException {
+    public void destroy(String id) throws IllegalOrphanException, NonexistentEntityException {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -110,6 +163,17 @@ public class AccountJpaController implements Serializable {
                 account.getAccountnum();
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The account with id " + id + " no longer exists.", enfe);
+            }
+            List<String> illegalOrphanMessages = null;
+            List<Transaction> transactionListOrphanCheck = account.getTransactionList();
+            for (Transaction transactionListOrphanCheckTransaction : transactionListOrphanCheck) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
+                }
+                illegalOrphanMessages.add("This Account (" + account + ") cannot be destroyed since the Transaction " + transactionListOrphanCheckTransaction + " in its transactionList field has a non-nullable accountnum field.");
+            }
+            if (illegalOrphanMessages != null) {
+                throw new IllegalOrphanException(illegalOrphanMessages);
             }
             Client clientid = account.getClientid();
             if (clientid != null) {

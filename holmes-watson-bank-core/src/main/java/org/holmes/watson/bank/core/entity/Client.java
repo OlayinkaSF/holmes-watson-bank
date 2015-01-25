@@ -9,11 +9,14 @@ import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -24,6 +27,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author Olayinka
  */
 @Entity
+@Table(catalog = "", schema = "HOLMESWATSONHQ")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Client.findAll", query = "SELECT c FROM Client c"),
@@ -37,25 +41,30 @@ public class Client implements Serializable {
     @Id
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 10)
+    @Size(min = 1, max = 30)
+    @Column(nullable = false, length = 30)
     private String clientid;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 50)
+    @Column(nullable = false, length = 50)
     private String firstname;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 50)
+    @Column(nullable = false, length = 50)
     private String password;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 50)
+    @Column(nullable = false, length = 50)
     private String lastname;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 100)
+    @Column(nullable = false, length = 100)
     private String address;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "clientid")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "clientid", fetch = FetchType.EAGER)
     private List<Account> accountList;
 
     public Client() {

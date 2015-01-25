@@ -65,7 +65,7 @@ public class ServiceRepo {
             List<Agency> agencies = agencyController.findAgencyEntities();
             for (Agency agency : agencies) {
                 try {
-                    Registry registry = LocateRegistry.getRegistry(agency.getAddress(), HolmesWatson.HQ_PORT);
+                    Registry registry = LocateRegistry.getRegistry(agency.getAddress(), HolmesWatson.PORT);
                     AuthService authService = (AuthService) registry.lookup(AuthService.SERVICE_NAME);
                     TransactionService transactionService = (TransactionService) registry.lookup(TransactionService.SERVICE_NAME);
                     AccountService accountService = (AccountService) registry.lookup(AccountService.SERVICE_NAME);

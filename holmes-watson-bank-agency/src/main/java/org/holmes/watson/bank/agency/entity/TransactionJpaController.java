@@ -14,6 +14,8 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import org.holmes.watson.bank.agency.entity.exceptions.NonexistentEntityException;
+import org.holmes.watson.bank.agency.entity.exceptions.PreexistingEntityException;
+import org.holmes.watson.bank.core.entity.Account;
 import org.holmes.watson.bank.core.entity.Transaction;
 
 /**
@@ -31,13 +33,27 @@ public class TransactionJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(Transaction transaction) {
+    public void create(Transaction transaction) throws PreexistingEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
+            Account accountnum = transaction.getAccountnum();
+            if (accountnum != null) {
+                accountnum = em.getReference(accountnum.getClass(), accountnum.getAccountnum());
+                transaction.setAccountnum(accountnum);
+            }
             em.persist(transaction);
+            if (accountnum != null) {
+                accountnum.getTransactionList().add(transaction);
+                accountnum = em.merge(accountnum);
+            }
             em.getTransaction().commit();
+        } catch (Exception ex) {
+            if (findTransaction(transaction.getTransactionid()) != null) {
+                throw new PreexistingEntityException("Transaction " + transaction + " already exists.", ex);
+            }
+            throw ex;
         } finally {
             if (em != null) {
                 em.close();
@@ -50,12 +66,27 @@ public class TransactionJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
+            Transaction persistentTransaction = em.find(Transaction.class, transaction.getTransactionid());
+            Account accountnumOld = persistentTransaction.getAccountnum();
+            Account accountnumNew = transaction.getAccountnum();
+            if (accountnumNew != null) {
+                accountnumNew = em.getReference(accountnumNew.getClass(), accountnumNew.getAccountnum());
+                transaction.setAccountnum(accountnumNew);
+            }
             transaction = em.merge(transaction);
+            if (accountnumOld != null && !accountnumOld.equals(accountnumNew)) {
+                accountnumOld.getTransactionList().remove(transaction);
+                accountnumOld = em.merge(accountnumOld);
+            }
+            if (accountnumNew != null && !accountnumNew.equals(accountnumOld)) {
+                accountnumNew.getTransactionList().add(transaction);
+                accountnumNew = em.merge(accountnumNew);
+            }
             em.getTransaction().commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
-                Long id = transaction.getTransactionid();
+                long id = transaction.getTransactionid();
                 if (findTransaction(id) == null) {
                     throw new NonexistentEntityException("The transaction with id " + id + " no longer exists.");
                 }
@@ -68,7 +99,7 @@ public class TransactionJpaController implements Serializable {
         }
     }
 
-    public void destroy(Long id) throws NonexistentEntityException {
+    public void destroy(long id) throws NonexistentEntityException {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -79,6 +110,11 @@ public class TransactionJpaController implements Serializable {
                 transaction.getTransactionid();
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The transaction with id " + id + " no longer exists.", enfe);
+            }
+            Account accountnum = transaction.getAccountnum();
+            if (accountnum != null) {
+                accountnum.getTransactionList().remove(transaction);
+                accountnum = em.merge(accountnum);
             }
             em.remove(transaction);
             em.getTransaction().commit();
@@ -113,7 +149,7 @@ public class TransactionJpaController implements Serializable {
         }
     }
 
-    public Transaction findTransaction(Long id) {
+    public Transaction findTransaction(long id) {
         EntityManager em = getEntityManager();
         try {
             return em.find(Transaction.class, id);
