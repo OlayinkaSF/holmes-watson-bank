@@ -105,7 +105,7 @@ public class CreateAgencyView extends javax.swing.JPanel {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
 
-        Agency agency = new Agency(agencyKey.getText(), ipAddress.getText());
+        Agency agency = new Agency(agencyKey.getText().trim(), ipAddress.getText().trim());
         AgencyJpaController agencyController = new AgencyJpaController(Boot.getManagerFactory());
         try {
             agencyController.create(agency);

@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import org.holmes.watson.bank.core.AgencyServices;
 import org.holmes.watson.bank.core.HolmesWatson;
 import org.holmes.watson.bank.core.Message;
@@ -195,17 +196,21 @@ public class TransferView extends javax.swing.JPanel implements ContextChangeLis
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         try {
-            BigDecimal amount = new BigDecimal(amountText.getValue().toString());
-            Account recipient = new Account(recipientText.getText());
+            BigDecimal amount = new BigDecimal(amountText.getValue().toString().trim());
+            Account recipient = new Account(recipientText.getText().trim());
             AgencyServices myAgency = Context.getAgencyServices();
             Message message = myAgency.getTransactionService().transferMoney((Account) accountDropDown.getSelectedItem(), recipient, amount);
             if (message.getStatus()) {
                 Context.setClient((Client) message.getAttachment()[0]);
                 Context.onContextChanged();
             }
+            JOptionPane.showMessageDialog(this, message.getMessage());
         } catch (RemoteException ex) {
             Logger.getLogger(TransferView.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, ex.getMessage());
         }
+        amountText.setValue(0);
+        accountNum.setText("");
     }//GEN-LAST:event_jButton2ActionPerformed
 
 

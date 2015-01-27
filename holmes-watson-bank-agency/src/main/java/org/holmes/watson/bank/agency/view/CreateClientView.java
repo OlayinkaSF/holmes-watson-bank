@@ -194,10 +194,10 @@ public class CreateClientView extends AbstrPanel {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         try {
             JSONObject object = new JSONObject();
-            String clientFirstName = jTextField1.getText();
-            String clientLastName = jTextField2.getText();
+            String clientFirstName = jTextField1.getText().trim();
+            String clientLastName = jTextField2.getText().trim();
             String clientPassword = new String(jPasswordField1.getPassword());
-            String clientAddress = jTextArea1.getText();
+            String clientAddress = jTextArea1.getText().trim();
 
             object.put("client.first.name", clientFirstName.trim());
             object.put("client.last.name", clientLastName.trim());
@@ -228,6 +228,7 @@ public class CreateClientView extends AbstrPanel {
         jTextField1.setText("");
         jTextField2.setText("");
         jPasswordField1.setText("");
+        amountSpinner.setValue(0);
 
     }//GEN-LAST:event_jButton2ActionPerformed
 

@@ -111,7 +111,7 @@ public class AuthView extends JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void enterKeyPressed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_enterKeyPressed
-        authListener.authenticate(loginText.getText(), new String(passwordText.getPassword()));
+        authListener.authenticate(loginText.getText().trim(), new String(passwordText.getPassword()));
     }//GEN-LAST:event_enterKeyPressed
 
 

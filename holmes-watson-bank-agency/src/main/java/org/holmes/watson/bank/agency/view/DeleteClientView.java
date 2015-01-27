@@ -102,7 +102,7 @@ public class DeleteClientView extends javax.swing.JPanel {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
 
-        Client client = new Client(jTextField1.getText());
+        Client client = new Client(jTextField1.getText().trim());
         jTextField1.setText("");
         try {
             // TODO add your handling code here:
