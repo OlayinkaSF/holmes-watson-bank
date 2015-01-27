@@ -66,6 +66,7 @@ public class AccountServiceImpl implements AccountService {
             Client client = new Client(clientId, clientFirstName, clientLastName, clientPassword, clientAddress);
             clientController.create(client);
             return Message.builder(true)
+                    .message("Client created successfully with Access ID\n" + clientId)
                     .attachment(client)
                     .build();
         } catch (JSONException ex) {
@@ -120,7 +121,7 @@ public class AccountServiceImpl implements AccountService {
                 account.setClientid(client);
                 accountController.create(account);
                 return Message.builder(true)
-                        .message("Account created successfully")
+                        .message("Account created successfully with ID \n" + account.getAccountnum())
                         .attachment(account)
                         .build();
             } catch (Exception ex) {
@@ -140,8 +141,7 @@ public class AccountServiceImpl implements AccountService {
     public Message getClient(Client client) throws RemoteException {
         try {
             Client tempClient = clientController.findClient(client.getClientid());
-            return Message.builder(true)
-                    .message("Account deleted seccessfully.")
+            return Message.builder(tempClient != null)
                     .attachment(tempClient)
                     .build();
         } catch (Exception ex) {

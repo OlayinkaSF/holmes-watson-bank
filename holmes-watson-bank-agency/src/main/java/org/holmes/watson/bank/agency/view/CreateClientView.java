@@ -10,6 +10,7 @@ import java.rmi.RemoteException;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import org.android.json.JSONException;
 import org.android.json.JSONObject;
 import org.holmes.watson.bank.core.Message;
@@ -205,6 +206,7 @@ public class CreateClientView extends AbstrPanel {
 
             Message message = accountService.createClient(object);
             if (message.getStatus()) {
+                optionPane(message.getMessage());
                 String amnt = amountSpinner.getValue().toString().trim();
                 amnt = amnt.length() == 0 ? "0" : amnt;
                 BigDecimal balance = new BigDecimal(amnt);
@@ -214,10 +216,18 @@ public class CreateClientView extends AbstrPanel {
                 jSONObject.put("account.name", account.getAccountnum());
                 message = accountService.createAccount((Client) message.getAttachment()[0], jSONObject);
                 optionPane(message.getMessage());
+            } else {
+                JOptionPane.showMessageDialog(this, message.getMessage());
             }
         } catch (JSONException | RemoteException ex) {
             Logger.getLogger(CreateClientView.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, ex.toString());
         }
+
+        jTextArea1.setText("");
+        jTextField1.setText("");
+        jTextField2.setText("");
+        jPasswordField1.setText("");
 
     }//GEN-LAST:event_jButton2ActionPerformed
 

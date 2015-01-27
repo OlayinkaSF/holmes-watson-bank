@@ -83,7 +83,7 @@ public class TransactionServiceImpl implements TransactionService {
                         .message("Couldn't complete transaction")
                         .build();
             }
-
+            clientController.getEntityManager().getEntityManagerFactory().getCache().evictAll();
             return Message.builder(true)
                     .message("Transfer completed successfully")
                     .attachment(withdrawMessage.getAttachment()[2])
@@ -146,7 +146,7 @@ public class TransactionServiceImpl implements TransactionService {
         }
 
         account = accountController.findAccount(account.getAccountnum());
-        
+
         System.out.println(account);
 
         try {
@@ -166,7 +166,7 @@ public class TransactionServiceImpl implements TransactionService {
                     .getName()).log(Level.SEVERE, null, ex);
         }
         return Message.builder(false)
-                .message("Invalid transaction.")
+                .message("Invalid transaction." + account == null ? "\nInvalid account number" : "")
                 .build();
     }
 
