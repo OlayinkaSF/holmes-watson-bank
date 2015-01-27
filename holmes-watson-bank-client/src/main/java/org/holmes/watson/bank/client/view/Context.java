@@ -22,7 +22,7 @@ public class Context {
     private static AgencyServices AGENCY_SERVICES;
     private static Client CLIENT;
 
-    private static List<AuthConfirmedListener> listeners = new ArrayList<>(20);
+    private static final List<ContextChangeListener> listeners = new ArrayList<>(20);
 
     static void setHqServices(AgencyServices hqServices) {
         HQ_SERVICES = hqServices;
@@ -56,12 +56,13 @@ public class Context {
         return CLIENT;
     }
 
-    public static void addListener(AuthConfirmedListener listener) {
+    public static void registerListener(ContextChangeListener listener) {
         listeners.add(listener);
     }
 
-    public static void onAuthConfirmed() {
-        for (AuthConfirmedListener listener : listeners) {
+    public static void onContextChanged() {
+        System.out.println("Context changed, reloading views");
+        for (ContextChangeListener listener : listeners) {
             listener.onAuthConfirmed();
         }
     }

@@ -17,7 +17,7 @@ import org.holmes.watson.bank.core.entity.Client;
  *
  * @author Olayinka
  */
-public class HomeView extends javax.swing.JPanel implements AuthConfirmedListener {
+public class HomeView extends javax.swing.JPanel implements ContextChangeListener {
 
     public final static String TAG_NAME = "home.view";
     private final CardLayout cardLayout = new CardLayout();
@@ -37,7 +37,7 @@ public class HomeView extends javax.swing.JPanel implements AuthConfirmedListene
         operationCards.add(new TerminateLoanView(), TerminateLoanView.TAG_NAME);
         operationCards.add(new TransferView(), TransferView.TAG_NAME);
         cardLayout.show(operationCards, AccountView.TAG_NAME);
-        Context.addListener(this);
+        Context.registerListener(this);
     }
 
     /**
@@ -69,9 +69,9 @@ public class HomeView extends javax.swing.JPanel implements AuthConfirmedListene
             }
         });
 
-        operationCards.setMaximumSize(new java.awt.Dimension(900, 375));
-        operationCards.setMinimumSize(new java.awt.Dimension(900, 375));
-        operationCards.setPreferredSize(new java.awt.Dimension(900, 375));
+        operationCards.setMaximumSize(new java.awt.Dimension(900, 360));
+        operationCards.setMinimumSize(new java.awt.Dimension(900, 360));
+        operationCards.setPreferredSize(new java.awt.Dimension(900, 360));
         operationCards.setLayout(new java.awt.CardLayout());
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -97,9 +97,9 @@ public class HomeView extends javax.swing.JPanel implements AuthConfirmedListene
                 .addComponent(addressTet)
                 .addGap(18, 18, 18)
                 .addComponent(opsDropDown, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(20, 20, 20)
-                .addComponent(operationCards, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
+                .addComponent(operationCards, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(25, 25, 25))
         );
     }// </editor-fold>//GEN-END:initComponents
 

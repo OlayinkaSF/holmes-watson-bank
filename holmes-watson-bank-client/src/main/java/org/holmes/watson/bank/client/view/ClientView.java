@@ -90,7 +90,7 @@ public class ClientView extends javax.swing.JFrame implements ClientAuthListener
             AccountService accountService = (AccountService) registry.lookup(AccountService.SERVICE_NAME);
 
             Context.setAgencyServices(new AgencyServices(accountService, transactionService, authService));
-            Context.onAuthConfirmed();
+            Context.onContextChanged();
             cardLayout.show(cards, HomeView.TAG_NAME);
 
         } catch (RemoteException | NotBoundException ex) {

@@ -9,7 +9,7 @@ package org.holmes.watson.bank.client.view;
  *
  * @author Olayinka
  */
-public interface AuthConfirmedListener {
+public interface ContextChangeListener {
 
     public void onAuthConfirmed();
 }

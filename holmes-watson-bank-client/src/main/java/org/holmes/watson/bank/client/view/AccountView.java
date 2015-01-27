@@ -5,15 +5,18 @@
  */
 package org.holmes.watson.bank.client.view;
 
+import java.util.List;
+import javax.swing.table.AbstractTableModel;
 import org.holmes.watson.bank.core.HolmesWatson;
 import org.holmes.watson.bank.core.entity.Account;
 import org.holmes.watson.bank.core.entity.Client;
+import org.holmes.watson.bank.core.entity.Transaction;
 
 /**
  *
  * @author Olayinka
  */
-public class AccountView extends javax.swing.JPanel implements AuthConfirmedListener {
+public class AccountView extends javax.swing.JPanel implements ContextChangeListener {
 
     public final static String TAG_NAME = "account.view";
 
@@ -22,7 +25,7 @@ public class AccountView extends javax.swing.JPanel implements AuthConfirmedList
      */
     public AccountView() {
         initComponents();
-        Context.addListener(this);
+        Context.registerListener(this);
     }
 
     /**
@@ -42,11 +45,12 @@ public class AccountView extends javax.swing.JPanel implements AuthConfirmedList
         balance = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        transactionTable = new javax.swing.JTable();
         jLabel7 = new javax.swing.JLabel();
 
-        setMaximumSize(new java.awt.Dimension(900, 375));
-        setMinimumSize(new java.awt.Dimension(900, 375));
+        setMaximumSize(new java.awt.Dimension(900, 360));
+        setMinimumSize(new java.awt.Dimension(900, 360));
+        setPreferredSize(new java.awt.Dimension(900, 360));
 
         accountDropDown.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         accountDropDown.addActionListener(new java.awt.event.ActionListener() {
@@ -64,18 +68,8 @@ public class AccountView extends javax.swing.JPanel implements AuthConfirmedList
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel6.setText("Account Balance: ");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        jScrollPane1.setViewportView(jTable1);
+        transactionTable.setRowHeight(25);
+        jScrollPane1.setViewportView(transactionTable);
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -118,7 +112,7 @@ public class AccountView extends javax.swing.JPanel implements AuthConfirmedList
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addContainerGap(345, Short.MAX_VALUE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(accountDropDown, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
@@ -133,16 +127,64 @@ public class AccountView extends javax.swing.JPanel implements AuthConfirmedList
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(balance, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addContainerGap(135, Short.MAX_VALUE))))
             .addGroup(layout.createSequentialGroup()
                 .addGap(39, 39, 39)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 322, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(14, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 301, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
     private void accountDropDownActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_accountDropDownActionPerformed
-        Account account = (Account) accountDropDown.getSelectedItem();
+        final Account account = (Account) accountDropDown.getSelectedItem();
+        transactionTable.setModel(new AbstractTableModel() {
+
+            List<Transaction> transactions = account.getTransactionList();
+
+            @Override
+            public int getRowCount() {
+                return transactions.size();
+            }
+
+            @Override
+            public int getColumnCount() {
+                return 4;
+            }
+
+            @Override
+            public String getColumnName(int columnIndex) {
+                switch (columnIndex) {
+                    case 0:
+                        return "DATE";
+                    case 1:
+                        return "TYPE";
+                    case 2:
+                        return "DESCRIPTION";
+                    case 3:
+                        return "AMOUNT";
+                    default:
+                        return null;
+                }
+            }
+
+            @Override
+            public Object getValueAt(int rowIndex, int columnIndex) {
+                Transaction transaction = transactions.get(rowIndex);
+                switch (columnIndex) {
+                    case 0:
+                        return transaction.getTransactiondate().toString();
+                    case 1:
+                        return transaction.getTransactiontype();
+                    case 2:
+                        return transaction.getDescription();
+                    case 3:
+                        return transaction.getAmount().toString();
+                    default:
+                        return null;
+                }
+            }
+        });
+
         accountNum.setText(account.getAccountnum().split("-")[1]);
         agency.setText(account.getAccountnum().split("-")[0]);
         balance.setText(HolmesWatson.CURRENCY_SHORT + " " + account.getAccountbalance().toString());
@@ -159,7 +201,7 @@ public class AccountView extends javax.swing.JPanel implements AuthConfirmedList
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable transactionTable;
     // End of variables declaration//GEN-END:variables
 
     @Override
