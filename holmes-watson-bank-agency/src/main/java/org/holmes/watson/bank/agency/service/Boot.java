@@ -41,7 +41,7 @@ public class Boot {
     private static boolean GUI = true;
 
     public static final String AGENCY_KEY = "agency.key";
-    public static final String ADDRESS_KEY = "agency.address";
+    public static final String ADDRESS_KEY = "agency.host";
     public static final String NAME_KEY = "agency.name";
 
     private static final String DB_USER_NAME = "db.user";

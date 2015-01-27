@@ -23,4 +23,9 @@ public enum Operation {
         this.text = text;
     }
 
+    @Override
+    public String toString() {
+        return text;
+    }
+
 }

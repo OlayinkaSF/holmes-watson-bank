@@ -38,6 +38,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Account.findByAccountbalance", query = "SELECT a FROM Account a WHERE a.accountbalance = :accountbalance"),
     @NamedQuery(name = "Account.findByStatus", query = "SELECT a FROM Account a WHERE a.status = :status")})
 public class Account implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -59,8 +60,7 @@ public class Account implements Serializable {
     @JoinColumn(name = "CLIENTID", referencedColumnName = "CLIENTID", nullable = false)
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private Client clientid;
-    
-    
+
     public static final int STATUS_OPEN = 0;
     public static final int STATUS_CLOSED = 1;
 
@@ -140,7 +140,7 @@ public class Account implements Serializable {
 
     @Override
     public String toString() {
-        return "org.holmes.watson.bank.core.entity.Account[ accountnum=" + accountnum + " ]";
+        return getAccountnum() + ", MAD " + getAccountbalance().toString();
     }
-    
+
 }

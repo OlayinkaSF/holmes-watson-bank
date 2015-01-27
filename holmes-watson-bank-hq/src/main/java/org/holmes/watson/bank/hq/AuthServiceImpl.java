@@ -7,7 +7,6 @@ package org.holmes.watson.bank.hq;
 
 import java.rmi.RemoteException;
 import java.util.Arrays;
-import javax.persistence.EntityManagerFactory;
 import org.holmes.watson.bank.core.AgencyServices;
 import org.holmes.watson.bank.core.Message;
 import org.holmes.watson.bank.core.Utils;

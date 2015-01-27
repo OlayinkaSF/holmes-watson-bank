@@ -14,7 +14,7 @@ import javax.swing.event.ListSelectionListener;
  */
 public class TerminateLoanView extends javax.swing.JPanel {
 
-    public final static String TAG_NAME = "account.view";
+    public final static String TAG_NAME = "terminate.loan.view";
 
     /**
      * Creates new form AccountPanel

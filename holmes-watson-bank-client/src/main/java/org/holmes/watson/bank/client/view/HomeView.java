@@ -6,9 +6,7 @@
 package org.holmes.watson.bank.client.view;
 
 import java.awt.CardLayout;
-import javax.swing.ComboBoxModel;
 import javax.swing.JComboBox;
-import javax.swing.event.ListDataListener;
 import org.holmes.watson.bank.core.AccountListener;
 import org.holmes.watson.bank.core.Operation;
 import static org.holmes.watson.bank.core.Operation.*;
@@ -19,14 +17,14 @@ import org.holmes.watson.bank.core.entity.Client;
  *
  * @author Olayinka
  */
-public class HomeView extends javax.swing.JPanel {
+public class HomeView extends javax.swing.JPanel implements AuthConfirmedListener {
 
     public final static String TAG_NAME = "home.view";
     private final CardLayout cardLayout = new CardLayout();
 
     TransactionListener opsListener;
     AccountListener accountListener;
-    Client client;
+    private Client client;
 
     public HomeView(TransactionListener opsListener, AccountListener accountListener) {
         initComponents();
@@ -39,7 +37,7 @@ public class HomeView extends javax.swing.JPanel {
         operationCards.add(new TerminateLoanView(), TerminateLoanView.TAG_NAME);
         operationCards.add(new TransferView(), TransferView.TAG_NAME);
         cardLayout.show(operationCards, AccountView.TAG_NAME);
-        client = ClientView.getClient();
+        Context.addListener(this);
     }
 
     /**
@@ -108,6 +106,7 @@ public class HomeView extends javax.swing.JPanel {
     private void onOpsSelected(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onOpsSelected
         assert opsDropDown == (JComboBox) evt.getSource();
         Operation operation = (Operation) opsDropDown.getSelectedItem();
+        System.out.println(operation);
         switch (operation) {
             case CONSULT:
                 cardLayout.show(operationCards, AccountView.TAG_NAME);
@@ -125,6 +124,7 @@ public class HomeView extends javax.swing.JPanel {
                 cardLayout.show(operationCards, TerminateLoanView.TAG_NAME);
                 break;
         }
+
     }//GEN-LAST:event_onOpsSelected
 
 
@@ -134,39 +134,12 @@ public class HomeView extends javax.swing.JPanel {
     private javax.swing.JPanel operationCards;
     private javax.swing.JComboBox<Operation> opsDropDown;
     // End of variables declaration//GEN-END:variables
-private class OpsDropDownModel implements ComboBoxModel<Operation> {
 
-        Operation[] operations = new Operation[]{CONSULT, TRANSFER, DEMAND_LOAN, TERMINATE_LOAN, PAY_LOAN};
-        Operation selection = null;
-
-        @Override
-        public void setSelectedItem(Object anItem) {
-            selection = (Operation) anItem;
-        }
-
-        @Override
-        public Object getSelectedItem() {
-            return selection;
-        }
-
-        @Override
-        public int getSize() {
-            return operations.length;
-        }
-
-        @Override
-        public Operation getElementAt(int index) {
-            return operations[index];
-        }
-
-        @Override
-        public void addListDataListener(ListDataListener l) {
-
-        }
-
-        @Override
-        public void removeListDataListener(ListDataListener l) {
-        }
+    @Override
+    public void onAuthConfirmed() {
+        this.client = Context.getClient();
+        clientNameText.setText(client.getLastname().toUpperCase() + ", " + client.getFirstname());
+        addressTet.setText(client.getAddress());
     }
 
 }

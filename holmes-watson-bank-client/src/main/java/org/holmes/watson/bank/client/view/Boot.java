@@ -43,9 +43,7 @@ public class Boot {
         AccountService accountService = (AccountService) registry.lookup(AccountService.SERVICE_NAME);
 
         AgencyServices hqServices = new AgencyServices(accountService, transactionService, authService);
-        EntityManagerFactory managerFactory;
-        Map<String, String> persistenceMap = new HashMap<>();
-
-        new ClientView(hqServices).setVisible(true);
+        Context.setHqServices(hqServices);
+        new ClientView().setVisible(true);
     }
 }

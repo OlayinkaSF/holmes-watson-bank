@@ -37,20 +37,13 @@ public class ClientView extends javax.swing.JFrame implements ClientAuthListener
 
     private final CardLayout cardLayout = new CardLayout();
     private final JPanel cards = new JPanel(cardLayout);
-    private static Client client;
 
-    public static Client getClient() {
-        return client;
-    }
-    private final AgencyServices hqServices;
-    private static Agency agency;
-    private AgencyServices agencyServices;
+    HomeView homeView = new HomeView(this, this);
 
-    ClientView(AgencyServices hqServices) {
-        this.hqServices = hqServices;
+    ClientView() {
         initComponents();
         cards.add(new AuthView(this), AuthView.TAG_NAME);
-        cards.add(new HomeView(this, this), HomeView.TAG_NAME);
+        cards.add(homeView, HomeView.TAG_NAME);
         cardLayout.show(cards, AuthView.TAG_NAME);
         add(cards);
     }
@@ -65,7 +58,6 @@ public class ClientView extends javax.swing.JFrame implements ClientAuthListener
     private void initComponents() {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setMaximumSize(new java.awt.Dimension(960, 540));
         setMinimumSize(new java.awt.Dimension(960, 540));
         setResizable(false);
 
@@ -77,13 +69,17 @@ public class ClientView extends javax.swing.JFrame implements ClientAuthListener
     // End of variables declaration//GEN-END:variables
     @Override
     public void authenticate(String login, String password) {
+
         try {
+            AgencyServices hqServices = Context.qetHqServices();
+            Agency agency;
             Message message = hqServices.getAuthService().authenticate(login, password);
             if (message.getStatus()) {
-                cardLayout.show(cards, HomeView.TAG_NAME);
-                client = (Client) message.getAttachment()[0];
+                Client client = (Client) message.getAttachment()[0];
+                Context.setClient(client);
                 agency = (Agency) message.getAttachment()[1];
-                client.getAccountList().addAll((ArrayList<Account>) message.getAttachment()[2]);
+                Context.setAgency(agency);
+                client.setAccountList((ArrayList<Account>) message.getAttachment()[2]);
             } else {
                 System.out.println(message.getMessage());
                 return;
@@ -93,10 +89,14 @@ public class ClientView extends javax.swing.JFrame implements ClientAuthListener
             TransactionService transactionService = (TransactionService) registry.lookup(TransactionService.SERVICE_NAME);
             AccountService accountService = (AccountService) registry.lookup(AccountService.SERVICE_NAME);
 
-            agencyServices = new AgencyServices(accountService, transactionService, authService);
+            Context.setAgencyServices(new AgencyServices(accountService, transactionService, authService));
+            Context.onAuthConfirmed();
+            cardLayout.show(cards, HomeView.TAG_NAME);
 
         } catch (RemoteException | NotBoundException ex) {
             Logger.getLogger(ClientView.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+
         }
     }
 

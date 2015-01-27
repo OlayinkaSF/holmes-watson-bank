@@ -5,6 +5,8 @@
  */
 package org.holmes.watson.bank.hq;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import org.holmes.watson.bank.agency.entity.AgencyJpaController;
 import org.holmes.watson.bank.agency.service.AccountServiceImpl;
@@ -98,17 +100,23 @@ public class CreateAgencyView extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+
+        Agency agency = new Agency(agencyKey.getText(), ipAddress.getText());
+        AgencyJpaController agencyController = new AgencyJpaController(Boot.getManagerFactory());
         try {
-            Agency agency = new Agency(agencyKey.getText(), ipAddress.getText());
-            AgencyJpaController agencyController = new AgencyJpaController(Boot.getManagerFactory());
             agencyController.create(agency);
             JOptionPane.showMessageDialog(this, "Agency created succesfully.");
-            agencyKey.setText("");
-            ipAddress.setText("");
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, ex.getMessage());
-        }
 
+        } catch (Exception ex) {
+            try {
+                agencyController.edit(agency);
+                JOptionPane.showMessageDialog(this, "Agency modified succesfully.");
+            } catch (Exception ex1) {
+                JOptionPane.showMessageDialog(this, ex.getMessage());
+            }
+        }
+        agencyKey.setText("");
+        ipAddress.setText("");
     }//GEN-LAST:event_jButton1ActionPerformed
 
     AccountService accountService = AccountServiceImpl.getLocalService();

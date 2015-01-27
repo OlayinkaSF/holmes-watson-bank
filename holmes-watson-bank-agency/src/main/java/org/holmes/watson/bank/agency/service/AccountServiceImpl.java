@@ -7,6 +7,7 @@ package org.holmes.watson.bank.agency.service;
 
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.logging.Level;
@@ -179,7 +180,9 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public List<Account> getAccounts(Client client) throws RemoteException {
-        return client.getAccountList();
+        client = clientController.findClient(client.getClientid());
+        System.out.println(Agency.getAgency().getAgencyid());
+        return client == null ? new ArrayList<Account>() : client.getAccountList();
     }
 
 }

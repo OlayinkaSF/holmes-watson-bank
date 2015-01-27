@@ -11,7 +11,7 @@ package org.holmes.watson.bank.client.view;
  */
 public class TransferView extends javax.swing.JPanel {
 
-    public final static String TAG_NAME = "account.view";
+    public final static String TAG_NAME = "transfer.view";
 
     /**
      * Creates new form AccountPanel
