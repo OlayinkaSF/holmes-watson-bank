@@ -46,7 +46,7 @@ public class AgencyView extends javax.swing.JFrame implements TransactionListene
         jButton4 = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMaximumSize(new java.awt.Dimension(960, 540));
         setMinimumSize(new java.awt.Dimension(960, 540));
         setResizable(false);

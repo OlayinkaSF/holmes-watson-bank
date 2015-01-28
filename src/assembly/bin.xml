@@ -1,0 +1,17 @@
+<assembly>
+    <formats>
+        <format>zip</format>
+    </formats>
+
+    <fileSets>
+        <fileSet>
+            <directory>to_complete</directory>
+            <outputDirectory />
+            <includes>
+                <include>**/*.jar</include>
+                <include>**/*.bat</include>
+                <include>**/*.exe</include>
+            </includes>
+        </fileSet>
+    </fileSets>
+</assembly>
