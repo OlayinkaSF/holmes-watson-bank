@@ -46,31 +46,12 @@ public class Boot {
     private static final String DB_USER_NAME = "db.user";
     private static final String DB_PASSWORD = "db.password";
     private static BackUpService backUpService;
+    private static final String HQ_HOST = "hq.host";
 
     public static void main(String... args) throws RemoteException, FileNotFoundException, IOException, NotBoundException {
         System.setSecurityManager(new RMISecurityManager());
 
-        String hqIp = HolmesWatson.HEADQUATERS_ADDRESS;
-        boolean ip = false;
-
-        for (String arg : args) {
-            switch (arg) {
-                case "-ip":
-                    ip = true;
-                    break;
-                default:
-                    if (ip) {
-                        hqIp = arg;
-                    }
-            }
-        }
-
-        String envPath = System.getenv("HOLMESWATSON");
-        if (envPath == null) {
-            System.err.println("Please set environment variable and create property file for bank agency.");
-            return;
-        }
-        File propertyFile = new File(envPath + File.separator + HolmesWatson.PROPERTY_FILE_NAME);
+        File propertyFile = new File(HolmesWatson.PROPERTY_FILE_NAME);
         Properties properties;
 
         try (InputStream is = new FileInputStream(propertyFile)) {
@@ -80,10 +61,17 @@ public class Boot {
 
         String agencyKey = properties.getProperty(AGENCY_KEY);
         String agencyAddress = properties.getProperty(ADDRESS_KEY);
-        String agencyName = properties.getProperty(NAME_KEY);
+        String hqIp = properties.getProperty(HQ_HOST, HolmesWatson.HEADQUATERS_ADDRESS);
 
         Agency agency = new Agency(agencyKey, agencyAddress);
         Agency.setAgency(agency);
+        String dbUser = properties.getProperty(DB_USER_NAME);
+        String dbPassword = properties.getProperty(DB_PASSWORD);
+
+        if (agencyKey == null || agencyAddress == null || hqIp == null || dbUser == null || dbPassword == null) {
+            System.err.println("Please set properties in root directory");
+            return;
+        }
 
         Registry registry = LocateRegistry.getRegistry(properties.getProperty("hq.host", hqIp), HolmesWatson.HQ_PORT);
         AuthService authService = (AuthService) registry.lookup(AuthService.SERVICE_NAME);
@@ -96,8 +84,8 @@ public class Boot {
 
         EntityManagerFactory managerFactory;
         Map<String, String> persistenceMap = new HashMap<>();
-        persistenceMap.put("javax.persistence.jdbc.user", properties.getProperty(DB_USER_NAME));
-        persistenceMap.put("javax.persistence.jdbc.password", properties.getProperty(DB_PASSWORD));
+        persistenceMap.put("javax.persistence.jdbc.user", dbUser);
+        persistenceMap.put("javax.persistence.jdbc.password", dbPassword);
         managerFactory = Persistence.createEntityManagerFactory("HOLMESWATSON", persistenceMap);
 
         ClientJpaController cjc = new ClientJpaController(managerFactory);

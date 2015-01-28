@@ -121,14 +121,4 @@ public class ClientView extends javax.swing.JFrame implements ClientAuthListener
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @Override
-    public void withdrawMoney(Client donor, BigDecimal amounut) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void depositMoney(Client donor, BigDecimal amounut) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
 }

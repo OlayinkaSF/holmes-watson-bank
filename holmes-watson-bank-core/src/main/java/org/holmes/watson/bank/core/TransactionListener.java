@@ -16,8 +16,4 @@ public interface TransactionListener {
 
     public void transferMoney(Client donor, Client recipient, BigDecimal amounut);
 
-    public void withdrawMoney(Client donor, BigDecimal amounut);
-
-    public void depositMoney(Client donor, BigDecimal amounut);
-
 }

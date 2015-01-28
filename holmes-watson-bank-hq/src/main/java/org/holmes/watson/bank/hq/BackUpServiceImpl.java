@@ -45,7 +45,7 @@ public class BackUpServiceImpl implements BackUpService {
         for (Account account : client.getAccountList()) {
             AccountJpaController ajc = new AccountJpaController(managerFactory);
             Account newAccount = new Account(account.getAccountnum(), account.getAccountbalance(), account.getStatus());
-            account.setClientid(newClient);
+            newAccount.setClientid(newClient);
             try {
                 ajc.create(newAccount);
             } catch (Exception ex) {
@@ -59,7 +59,7 @@ public class BackUpServiceImpl implements BackUpService {
             for (Transaction transaction : account.getTransactionList()) {
                 TransactionJpaController tjc = new TransactionJpaController(managerFactory);
                 Transaction newTransaction = new Transaction(transaction.getTransactionid(), transaction.getDescription(), transaction.getAmount(), transaction.getTransactiondate(), transaction.getTransactiontype());
-                transaction.setAccountnum(newAccount);
+                newTransaction.setAccountnum(newAccount);
                 try {
                     tjc.create(newTransaction);
                 } catch (Exception ex) {
