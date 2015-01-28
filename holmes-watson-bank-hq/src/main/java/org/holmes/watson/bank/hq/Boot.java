@@ -19,11 +19,13 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.Properties;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import org.holmes.watson.bank.agency.service.BackUpService;
 import org.holmes.watson.bank.core.AccountService;
 import org.holmes.watson.bank.core.HolmesWatson;
 import org.holmes.watson.bank.core.TransactionService;
 import org.holmes.watson.bank.core.auth.AuthService;
 import org.holmes.watson.bank.core.entity.Agency;
+import static org.holmes.watson.bank.hq.BackUpServiceImpl.BACK_UP_SERVICE;
 import static org.holmes.watson.bank.hq.ServiceRepo.ACCOUNT_SERVICE;
 import static org.holmes.watson.bank.hq.ServiceRepo.AUTH_SERVICE;
 import static org.holmes.watson.bank.hq.ServiceRepo.TRANSACTION_SERVICE;
@@ -86,13 +88,16 @@ public class Boot {
 
         ((TransactionServiceImpl) TRANSACTION_SERVICE).setEmf(managerFactory);
         ((AccountServiceImpl) ACCOUNT_SERVICE).setEmf(managerFactory);
+        ((BackUpServiceImpl) BACK_UP_SERVICE).setEmf(managerFactory);
 
+        registry.rebind(BackUpService.SERVICE_NAME, UnicastRemoteObject.exportObject(BACK_UP_SERVICE, HolmesWatson.HQ_PORT));
         registry.rebind(AuthService.SERVICE_NAME, UnicastRemoteObject.exportObject(AUTH_SERVICE, HolmesWatson.HQ_PORT));
         registry.rebind(AccountService.SERVICE_NAME, UnicastRemoteObject.exportObject(ACCOUNT_SERVICE, HolmesWatson.HQ_PORT));
         registry.rebind(TransactionService.SERVICE_NAME, UnicastRemoteObject.exportObject(TRANSACTION_SERVICE, HolmesWatson.HQ_PORT));
 
         new HQView().setVisible(true);
         ServiceRepo.startPing(managerFactory);
+        
     }
 
     public static EntityManagerFactory getManagerFactory() {

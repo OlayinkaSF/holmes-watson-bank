@@ -12,6 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.android.json.JSONException;
 import org.android.json.JSONObject;
+import org.holmes.watson.bank.agency.service.Boot;
 import org.holmes.watson.bank.core.Message;
 import org.holmes.watson.bank.core.Utils;
 import org.holmes.watson.bank.core.entity.Account;

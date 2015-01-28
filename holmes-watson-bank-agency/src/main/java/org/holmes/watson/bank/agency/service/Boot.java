@@ -19,6 +19,7 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.TimeUnit;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import org.holmes.watson.bank.agency.entity.ClientJpaController;
@@ -46,6 +47,7 @@ public class Boot {
 
     private static final String DB_USER_NAME = "db.user";
     private static final String DB_PASSWORD = "db.password";
+    private static BackUpService backUpService;
 
     public static void main(String... args) throws RemoteException, FileNotFoundException, IOException, NotBoundException {
         System.setSecurityManager(new RMISecurityManager());
@@ -57,7 +59,7 @@ public class Boot {
                     break;
                 case "-gui":
                     GUI = true;
-                    
+
                     break;
                 default:
                     System.out.println("Usage with -gui xor gui");
@@ -88,6 +90,7 @@ public class Boot {
         AuthService authService = (AuthService) registry.lookup(AuthService.SERVICE_NAME);
         TransactionService transactionService = (TransactionService) registry.lookup(TransactionService.SERVICE_NAME);
         AccountService accountService = (AccountService) registry.lookup(AccountService.SERVICE_NAME);
+        backUpService = (BackUpService) registry.lookup(BackUpService.SERVICE_NAME);
         ((AuthServiceImpl) AUTH_SERVICE).setHqService(authService);
         ((TransactionServiceImpl) TRANSACTION_SERVICE).setHqService(transactionService);
         ((AccountServiceImpl) ACCOUNT_SERVICE).setHqService(accountService);
@@ -97,9 +100,9 @@ public class Boot {
         persistenceMap.put("javax.persistence.jdbc.user", properties.getProperty(DB_USER_NAME));
         persistenceMap.put("javax.persistence.jdbc.password", properties.getProperty(DB_PASSWORD));
         managerFactory = Persistence.createEntityManagerFactory("HOLMESWATSON", persistenceMap);
-        
+
         ClientJpaController cjc = new ClientJpaController(managerFactory);
-        System.out.println(cjc.findClient("AWE-1192399080"));
+        System.out.println(cjc.findClient(""));
 
         ((AuthServiceImpl) AUTH_SERVICE).setEmf(managerFactory);
         ((TransactionServiceImpl) TRANSACTION_SERVICE).setEmf(managerFactory);
@@ -110,5 +113,9 @@ public class Boot {
         registry.rebind(AccountService.SERVICE_NAME, UnicastRemoteObject.exportObject(ACCOUNT_SERVICE, HolmesWatson.PORT));
         registry.rebind(TransactionService.SERVICE_NAME, UnicastRemoteObject.exportObject(TRANSACTION_SERVICE, HolmesWatson.PORT));
         new AgencyView().setVisible(true);
+        new Thread(new BackUpThread(backUpService, cjc)).start();
+        BackUpService.scheduler.schedule(new BackUpThread(backUpService, cjc), 6, TimeUnit.HOURS);
+
     }
+
 }

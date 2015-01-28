@@ -24,7 +24,6 @@ public class HomeView extends javax.swing.JPanel implements ContextChangeListene
 
     TransactionListener opsListener;
     AccountListener accountListener;
-    private Client client;
 
     public HomeView(TransactionListener opsListener, AccountListener accountListener) {
         initComponents();
@@ -137,7 +136,7 @@ public class HomeView extends javax.swing.JPanel implements ContextChangeListene
 
     @Override
     public void onAuthConfirmed() {
-        this.client = Context.getClient();
+        Client client = Context.getClient();
         clientNameText.setText(client.getLastname().toUpperCase() + ", " + client.getFirstname());
         addressTet.setText(client.getAddress());
     }

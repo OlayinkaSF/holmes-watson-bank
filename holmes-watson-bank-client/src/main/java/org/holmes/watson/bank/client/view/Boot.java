@@ -12,9 +12,6 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import javax.persistence.EntityManagerFactory;
 import org.holmes.watson.bank.core.AccountService;
 import org.holmes.watson.bank.core.AgencyServices;
 import org.holmes.watson.bank.core.HolmesWatson;
@@ -45,5 +42,6 @@ public class Boot {
         AgencyServices hqServices = new AgencyServices(accountService, transactionService, authService);
         Context.setHqServices(hqServices);
         new ClientView().setVisible(true);
+        Context.startThread();
     }
 }

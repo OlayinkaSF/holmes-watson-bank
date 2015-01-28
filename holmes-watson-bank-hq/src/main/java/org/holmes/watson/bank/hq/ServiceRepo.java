@@ -46,7 +46,7 @@ public class ServiceRepo {
 
     public static void startPing(EntityManagerFactory managerFactory) {
         agencyController = new AgencyJpaController(managerFactory);
-        scheduler.scheduleAtFixedRate(new PingThread(), 0, 1, TimeUnit.MINUTES);
+        scheduler.scheduleAtFixedRate(new PingThread(), 0, 10, TimeUnit.SECONDS);
     }
 
     static HashMap<String, AgencyServices> getServices() {

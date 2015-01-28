@@ -94,6 +94,7 @@ public class ClientView extends javax.swing.JFrame implements ClientAuthListener
             cardLayout.show(cards, HomeView.TAG_NAME);
 
         } catch (RemoteException | NotBoundException ex) {
+            Context.reconnect();
             Logger.getLogger(ClientView.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
 
@@ -130,18 +131,4 @@ public class ClientView extends javax.swing.JFrame implements ClientAuthListener
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @Override
-    public void demandLoan(Client client, BigDecimal amount) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void terminateLoan(Client client, int loanId) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void payLoan(Client client, Integer loanId) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 }

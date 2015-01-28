@@ -20,10 +20,4 @@ public interface TransactionListener {
 
     public void depositMoney(Client donor, BigDecimal amounut);
 
-    public void demandLoan(Client client, BigDecimal amount);
-
-    public void terminateLoan(Client client, int loanId);
-
-    public void payLoan(Client client, Integer loanId);
-
 }

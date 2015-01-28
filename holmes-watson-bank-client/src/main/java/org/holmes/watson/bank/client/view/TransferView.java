@@ -206,6 +206,7 @@ public class TransferView extends javax.swing.JPanel implements ContextChangeLis
             }
             JOptionPane.showMessageDialog(this, message.getMessage());
         } catch (RemoteException ex) {
+            Context.reconnect();
             Logger.getLogger(TransferView.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(this, ex.getMessage());
         }
