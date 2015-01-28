@@ -108,7 +108,7 @@ public class DeleteClientView extends javax.swing.JPanel {
             // TODO add your handling code here:
             Message message = accountService.deleteClient(client);
             JOptionPane.showMessageDialog(this, message.getMessage());
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(DeleteAccountView.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(this, ex.getMessage());
         }

@@ -104,14 +104,14 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public Message withdrawMoney(Account donor, BigDecimal amounut, String description) throws RemoteException {
+    public Message withdrawMoney(Account account, BigDecimal amounut, String description) throws RemoteException {
 
-        if (!Utils.isMyAgency(donor.getAccountnum())) {
-            return hqService.withdrawMoney(donor, amounut, description);
+        if (!Utils.isMyAgency(account.getAccountnum())) {
+            return hqService.withdrawMoney(account, amounut, description);
         }
 
-        donor = accountController.findAccount(donor.getAccountnum());
-        if (donor.getAccountbalance().compareTo(amounut) <= 0) {
+        account = accountController.findAccount(account.getAccountnum());
+        if (account.getAccountbalance().compareTo(amounut) <= 0) {
             return Message.builder(false)
                     .message("Insufficient balance for transaction.")
                     .build();
@@ -119,14 +119,14 @@ public class TransactionServiceImpl implements TransactionService {
 
         try {
             Transaction transaction = new Transaction(Long.MIN_VALUE, description, amounut, new Date(), Transaction.WITHDRAW);
-            transaction.setAccountnum(donor);
-            donor.setAccountbalance(donor.getAccountbalance().subtract(amounut));
-            accountController.edit(donor);
+            transaction.setAccountnum(account);
+            account.setAccountbalance(account.getAccountbalance().subtract(amounut));
+            accountController.edit(account);
             transactionController.create(transaction);
-            Client client = clientController.findClient(donor.getClientid().getClientid());
+            Client client = clientController.findClient(account.getClientid().getClientid());
             return Message.builder(true)
                     .message("Transaction completed")
-                    .attachment(transaction, donor, client)
+                    .attachment(transaction, account, client)
                     .build();
 
         } catch (Exception ex) {

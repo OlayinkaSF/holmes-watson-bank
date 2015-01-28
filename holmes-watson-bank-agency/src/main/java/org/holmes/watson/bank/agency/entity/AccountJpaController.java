@@ -80,6 +80,7 @@ public class AccountJpaController implements Serializable {
                 em.close();
             }
         }
+        emf.getCache().evictAll();
     }
 
     public void edit(Account account) throws IllegalOrphanException, NonexistentEntityException, Exception {
@@ -150,6 +151,7 @@ public class AccountJpaController implements Serializable {
                 em.close();
             }
         }
+        emf.getCache().evictAll();
     }
 
     public void destroy(String id) throws IllegalOrphanException, NonexistentEntityException {
@@ -187,6 +189,7 @@ public class AccountJpaController implements Serializable {
                 em.close();
             }
         }
+        emf.getCache().evictAll();
     }
 
     public List<Account> findAccountEntities() {

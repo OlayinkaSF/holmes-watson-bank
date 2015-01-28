@@ -126,9 +126,7 @@ public class WithdrawMoneyView extends AbstrPanel {
             Message message = transactionService.withdrawMoney(account, new BigDecimal(str), "Witdraw money");
             optionPane(message.getMessage());
 
-        } catch (ArithmeticException ex) {
-            optionPane(ex.getMessage());
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             optionPane(ex.getMessage());
             Logger.getLogger(WithdrawMoneyView.class.getName()).log(Level.SEVERE, null, ex);
         }

@@ -120,10 +120,7 @@ public class DepositMoneyView extends AbstrPanel {
             Account account = new Account(jTextField1.getText().trim());
             Message message = transactionService.depositMoney(account, new BigDecimal(str), "Deposit money");
             optionPane(message.getMessage());
-
-        } catch (ArithmeticException ex) {
-            optionPane(ex.getMessage());
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             optionPane(ex.getMessage());
             Logger.getLogger(DepositMoneyView.class.getName()).log(Level.SEVERE, null, ex);
         }

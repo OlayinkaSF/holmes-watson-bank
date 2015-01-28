@@ -130,7 +130,7 @@ public class DeleteAccountView extends javax.swing.JPanel {
             // TODO add your handling code here:
             Message message = accountService.deleteAccount(account);
             JOptionPane.showMessageDialog(this, message.getMessage());
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(DeleteAccountView.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(this, ex.getMessage());
         }

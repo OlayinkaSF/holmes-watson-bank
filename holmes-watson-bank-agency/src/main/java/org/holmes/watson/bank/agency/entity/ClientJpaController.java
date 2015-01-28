@@ -70,6 +70,7 @@ public class ClientJpaController implements Serializable {
                 em.close();
             }
         }
+        emf.getCache().evictAll();
     }
 
     public void edit(Client client) throws IllegalOrphanException, NonexistentEntityException, Exception {
@@ -126,6 +127,7 @@ public class ClientJpaController implements Serializable {
                 em.close();
             }
         }
+        emf.getCache().evictAll();
     }
 
     public void destroy(String id) throws IllegalOrphanException, NonexistentEntityException {
@@ -158,6 +160,7 @@ public class ClientJpaController implements Serializable {
                 em.close();
             }
         }
+        emf.getCache().evictAll();
     }
 
     public List<Client> findClientEntities() {
@@ -205,5 +208,5 @@ public class ClientJpaController implements Serializable {
             em.close();
         }
     }
-    
+
 }

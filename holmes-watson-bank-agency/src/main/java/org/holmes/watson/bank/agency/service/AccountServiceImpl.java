@@ -83,6 +83,10 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Message deleteAccount(Account account) throws RemoteException {
         try {
+            if (!Utils.isMyAgency(account.getAccountnum())) {
+                return Message.builder(false).message("Please go to your agency to delete accounut!")
+                        .build();
+            }
             account.setStatus(Account.STATUS_CLOSED);
             accountController.edit(account);
             return Message.builder(true)

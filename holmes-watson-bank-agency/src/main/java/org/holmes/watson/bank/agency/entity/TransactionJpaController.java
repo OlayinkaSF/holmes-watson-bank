@@ -59,6 +59,7 @@ public class TransactionJpaController implements Serializable {
                 em.close();
             }
         }
+        emf.getCache().evictAll();
     }
 
     public void edit(Transaction transaction) throws NonexistentEntityException, Exception {
@@ -97,6 +98,7 @@ public class TransactionJpaController implements Serializable {
                 em.close();
             }
         }
+        emf.getCache().evictAll();
     }
 
     public void destroy(long id) throws NonexistentEntityException {
@@ -123,6 +125,7 @@ public class TransactionJpaController implements Serializable {
                 em.close();
             }
         }
+        emf.getCache().evictAll();
     }
 
     public List<Transaction> findTransactionEntities() {
@@ -170,5 +173,5 @@ public class TransactionJpaController implements Serializable {
             em.close();
         }
     }
-    
+
 }

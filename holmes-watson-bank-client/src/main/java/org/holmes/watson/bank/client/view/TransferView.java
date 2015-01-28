@@ -211,7 +211,7 @@ public class TransferView extends javax.swing.JPanel implements ContextChangeLis
             JOptionPane.showMessageDialog(this, ex.getMessage());
         }
         amountText.setValue(0);
-        accountNum.setText("");
+        recipientText.setText("");
     }//GEN-LAST:event_jButton2ActionPerformed
 
 
