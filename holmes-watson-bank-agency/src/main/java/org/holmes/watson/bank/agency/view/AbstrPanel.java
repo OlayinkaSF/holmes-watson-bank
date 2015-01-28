@@ -7,7 +7,9 @@ package org.holmes.watson.bank.agency.view;
 
 import javax.swing.JPanel;
 import org.holmes.watson.bank.agency.service.AccountServiceImpl;
+import org.holmes.watson.bank.agency.service.TransactionServiceImpl;
 import org.holmes.watson.bank.core.AccountService;
+import org.holmes.watson.bank.core.TransactionService;
 
 /**
  *
@@ -17,6 +19,7 @@ public abstract class AbstrPanel extends JPanel {
 
     protected TransactionListener listener;
     protected AccountService accountService = AccountServiceImpl.getLocalService();
+    TransactionService transactionService = TransactionServiceImpl.getLocalService();
 
     public AbstrPanel(TransactionListener listener) {
         this.listener = listener;

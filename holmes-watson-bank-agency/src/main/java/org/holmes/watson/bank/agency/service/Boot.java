@@ -39,8 +39,6 @@ import org.holmes.watson.bank.core.entity.Agency;
  */
 public class Boot {
 
-    private static boolean GUI = true;
-
     public static final String AGENCY_KEY = "agency.key";
     public static final String ADDRESS_KEY = "agency.host";
     public static final String NAME_KEY = "agency.name";
@@ -52,20 +50,21 @@ public class Boot {
     public static void main(String... args) throws RemoteException, FileNotFoundException, IOException, NotBoundException {
         System.setSecurityManager(new RMISecurityManager());
 
+        String hqIp = HolmesWatson.HEADQUATERS_ADDRESS;
+        boolean ip = false;
+
         for (String arg : args) {
             switch (arg) {
-                case "-nogui":
-                    GUI = false;
-                    break;
-                case "-gui":
-                    GUI = true;
-
+                case "-ip":
+                    ip = true;
                     break;
                 default:
-                    System.out.println("Usage with -gui xor gui");
-                    return;
+                    if (ip) {
+                        hqIp = arg;
+                    }
             }
         }
+
         String envPath = System.getenv("HOLMESWATSON");
         if (envPath == null) {
             System.err.println("Please set environment variable and create property file for bank agency.");
@@ -86,7 +85,7 @@ public class Boot {
         Agency agency = new Agency(agencyKey, agencyAddress);
         Agency.setAgency(agency);
 
-        Registry registry = LocateRegistry.getRegistry(properties.getProperty("hq.host", HolmesWatson.HEADQUATERS_ADDRESS), HolmesWatson.HQ_PORT);
+        Registry registry = LocateRegistry.getRegistry(properties.getProperty("hq.host", hqIp), HolmesWatson.HQ_PORT);
         AuthService authService = (AuthService) registry.lookup(AuthService.SERVICE_NAME);
         TransactionService transactionService = (TransactionService) registry.lookup(TransactionService.SERVICE_NAME);
         AccountService accountService = (AccountService) registry.lookup(AccountService.SERVICE_NAME);

@@ -77,8 +77,8 @@ public class Client implements Serializable {
     public Client(String clientid, String firstname, String lastname, String password, String address) {
         this.clientid = clientid;
         this.firstname = firstname;
-        this.password = password;
         this.lastname = lastname;
+        this.password = password;
         this.address = address;
     }
 

@@ -49,37 +49,22 @@ public class Boot {
     public static void main(String... args) throws RemoteException, FileNotFoundException, IOException, NotBoundException {
         System.setSecurityManager(new RMISecurityManager());
 
+        String hqIp = HolmesWatson.HEADQUATERS_ADDRESS;
+        boolean ip = false;
+
         for (String arg : args) {
             switch (arg) {
-                case "-nogui":
-                    GUI = false;
-                    break;
-                case "-gui":
-                    GUI = true;
+                case "-ip":
+                    ip = true;
                     break;
                 default:
-                    System.out.println("Usage with -gui xor gui");
-                    return;
+                    if (ip) {
+                        hqIp = arg;
+                    }
             }
         }
-        String envPath = System.getenv("HOLMESWATSON");
-        if (envPath == null) {
-            System.err.println("Please set environment variable and create property file for bank agency.");
-            return;
-        }
-        File propertyFile = new File(envPath + File.separator + HolmesWatson.PROPERTY_FILE_NAME);
-        Properties properties;
 
-        try (InputStream is = new FileInputStream(propertyFile)) {
-            properties = new Properties();
-            properties.load(is);
-        }
-
-        String agencyKey = properties.getProperty(AGENCY_KEY);
-        String agencyAddress = properties.getProperty(ADDRESS_KEY);
-        String agencyName = properties.getProperty(NAME_KEY);
-
-        Agency agency = new Agency(agencyKey, agencyAddress);
+        Agency agency = new Agency("HQ", hqIp);
         Agency.setAgency(agency);
 
         Registry registry = LocateRegistry.createRegistry(HolmesWatson.HQ_PORT);
@@ -97,7 +82,7 @@ public class Boot {
 
         new HQView().setVisible(true);
         ServiceRepo.startPing(managerFactory);
-        
+
     }
 
     public static EntityManagerFactory getManagerFactory() {

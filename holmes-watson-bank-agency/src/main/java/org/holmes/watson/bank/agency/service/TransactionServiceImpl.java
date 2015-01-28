@@ -105,17 +105,17 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public Message withdrawMoney(Account donor, BigDecimal amounut, String description) throws RemoteException {
-        if (donor.getAccountbalance().compareTo(amounut) <= 0) {
-            return Message.builder(false)
-                    .message("Insufficient balance for transaction.")
-                    .build();
-        }
 
         if (!Utils.isMyAgency(donor.getAccountnum())) {
             return hqService.withdrawMoney(donor, amounut, description);
         }
 
         donor = accountController.findAccount(donor.getAccountnum());
+        if (donor.getAccountbalance().compareTo(amounut) <= 0) {
+            return Message.builder(false)
+                    .message("Insufficient balance for transaction.")
+                    .build();
+        }
 
         try {
             Transaction transaction = new Transaction(Long.MIN_VALUE, description, amounut, new Date(), Transaction.WITHDRAW);
