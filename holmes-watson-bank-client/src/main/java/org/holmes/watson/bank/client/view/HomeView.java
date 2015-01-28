@@ -31,9 +31,6 @@ public class HomeView extends javax.swing.JPanel implements ContextChangeListene
         this.accountListener = accountListener;
         operationCards.setLayout(cardLayout);
         operationCards.add(new AccountView(), AccountView.TAG_NAME);
-        operationCards.add(new DemandLoanView(), DemandLoanView.TAG_NAME);
-        operationCards.add(new PayLoanView(), PayLoanView.TAG_NAME);
-        operationCards.add(new TerminateLoanView(), TerminateLoanView.TAG_NAME);
         operationCards.add(new TransferView(), TransferView.TAG_NAME);
         cardLayout.show(operationCards, AccountView.TAG_NAME);
         Context.registerListener(this);
@@ -112,15 +109,6 @@ public class HomeView extends javax.swing.JPanel implements ContextChangeListene
                 break;
             case TRANSFER:
                 cardLayout.show(operationCards, TransferView.TAG_NAME);
-                break;
-            case DEMAND_LOAN:
-                cardLayout.show(operationCards, DemandLoanView.TAG_NAME);
-                break;
-            case PAY_LOAN:
-                cardLayout.show(operationCards, PayLoanView.TAG_NAME);
-                break;
-            case TERMINATE_LOAN:
-                cardLayout.show(operationCards, TerminateLoanView.TAG_NAME);
                 break;
         }
 

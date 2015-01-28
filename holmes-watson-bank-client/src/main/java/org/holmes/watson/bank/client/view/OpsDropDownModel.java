@@ -9,9 +9,6 @@ import javax.swing.ComboBoxModel;
 import javax.swing.event.ListDataListener;
 import org.holmes.watson.bank.core.Operation;
 import static org.holmes.watson.bank.core.Operation.CONSULT;
-import static org.holmes.watson.bank.core.Operation.DEMAND_LOAN;
-import static org.holmes.watson.bank.core.Operation.PAY_LOAN;
-import static org.holmes.watson.bank.core.Operation.TERMINATE_LOAN;
 import static org.holmes.watson.bank.core.Operation.TRANSFER;
 
 /**
@@ -20,7 +17,7 @@ import static org.holmes.watson.bank.core.Operation.TRANSFER;
  */
 public class OpsDropDownModel implements ComboBoxModel<Operation> {
 
-    Operation[] operations = new Operation[]{CONSULT, TRANSFER, DEMAND_LOAN, TERMINATE_LOAN, PAY_LOAN};
+    Operation[] operations = new Operation[]{CONSULT, TRANSFER};
     Operation selection = operations[0];
 
     @Override
